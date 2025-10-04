@@ -1,0 +1,34 @@
+# Archivos de construcción generados
+# ==================================
+/build
+.gradle
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Archivos del IDE (Android Studio)
+# =================================
+/.idea/
+*.iml
+
+# Archivos de configuración local
+# ===============================
+local.properties
+
+# Archivos de registro y caché
+# ============================
+/captures
+.DS_Store
+.externalNativeBuild
+.cxx
+
+# Archivos de la JVM
+# =o============================
+*.log
+
+# Archivos del emulador de Firebase
+# =================================
+.firebase/
+firebase-debug.log
