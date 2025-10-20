@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Axolingo">
 
         <activity
-            android:name=".userSignForms.SignInActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +24,22 @@
         </activity>
 
         <activity
+            android:name=".userSignForms.SignInActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
             android:name=".userSignForms.SignUpActivity"
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
-            android:exported="false" /> </application>
+            android:name=".forms.IniciarSesion"
+            android:exported="false" />
+
+        <activity
+            android:name=".forms.Registrarse"
+            android:exported="false" />
+
+    </application>
 
 </manifest>
