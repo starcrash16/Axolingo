@@ -16,7 +16,7 @@
 
         <!-- Esta es tu actividad de inicio de sesión, la que se abre primero -->
         <activity
-            android:name=".userSignForms.SignInActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,10 +25,15 @@
         </activity>
 
         <activity
+            android:name=".userSignForms.SignInActivity"
+            android:exported="false">
+        </activity>
+
+        <activity
             android:name=".userSignForms.SignUpActivity"
             android:exported="false" />
 
-        <activity
+
             android:name=".MainActivity"
             android:exported="false" />
 
@@ -45,7 +50,14 @@
             android:name=".menu_vocabulario.MenuVocabularyActivity"
             android:exported="false" />
 
+      android:name=".forms.IniciarSesion"
+            android:exported="false" />
+
+        <activity
+            android:name=".forms.Registrarse"
+            android:exported="false" />
     </application>
 
 </manifest>
+            
 
