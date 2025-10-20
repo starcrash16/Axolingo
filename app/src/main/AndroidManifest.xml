@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Axolingo">
 
+        <!-- Esta es tu actividad de inicio de sesión, la que se abre primero -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,14 +33,31 @@
             android:name=".userSignForms.SignUpActivity"
             android:exported="false" />
 
+
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!--
+            LA CORRECCIÓN ESTÁ AQUÍ:
+            La declaración de MenuPrincipalActivity debe estar DENTRO de la etiqueta <application>
+            y con el nombre completo.
+        -->
         <activity
-            android:name=".forms.IniciarSesion"
+            android:name=".menu_principal.MenuPrincipalActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".menu_vocabulario.MenuVocabularyActivity"
+            android:exported="false" />
+
+      android:name=".forms.IniciarSesion"
             android:exported="false" />
 
         <activity
             android:name=".forms.Registrarse"
             android:exported="false" />
-
     </application>
 
 </manifest>
+            
+

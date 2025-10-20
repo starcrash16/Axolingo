@@ -2,44 +2,32 @@ package com.proyecto_final.axolingo
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.proyecto_final.axolingo.forms.IniciarSesion
-import com.proyecto_final.axolingo.forms.Registrarse
-import com.proyecto_final.axolingo.views.MenuPrincipal
+import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
+import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
+
+// Asegúrate de que tu layout de bienvenida se llama 'menu_bienvenida.xml'
+// y que contiene un botón con el id 'btnInfoApp'.
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // 1. Establece el layout para esta Activity.
         setContentView(R.layout.menu_bienvenida)
-        /*ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
 
-        var btnRegistro: Button = findViewById(R.id.btnRegistro)
-        var btnLogin: Button = findViewById(R.id.btnIniciarSesion)
+        // 2. Encuentra el botón por su ID.
+        val infoAppButton: BotonMenuPrincipalAzul = findViewById(R.id.btnInfoApp)
 
-        btnRegistro.setOnClickListener(evento)
-        btnLogin.setOnClickListener(evento)
-    }
+        // 3. Configura el listener para que reaccione al clic del usuario.
+        infoAppButton.setOnClickListener {
+            // 4. Crea un Intent para iniciar la Activity correcta.
+            //    La corrección clave está en usar '::class.java'.
+            val intent = Intent(this, MenuPrincipalActivity::class.java)
 
-    val evento = View.OnClickListener { view ->
-        when (view.getId()) {
-            R.id.btnRegistro -> {
-                val intent = Intent(this, Registrarse::class.java)
-                startActivity(intent)
-            }
-            R.id.btnIniciarSesion -> {
-                val intent = Intent(this, IniciarSesion::class.java)
-                startActivity(intent)
-            }
+            // 5. Inicia la nueva Activity.
+            startActivity(intent)
         }
     }
 }
+
