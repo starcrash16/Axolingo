@@ -1,6 +1,7 @@
 package com.proyecto_final.axolingo.views
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
+import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
 
 class MenuPrincipal @JvmOverloads constructor(
     context: Context,
@@ -25,18 +27,17 @@ class MenuPrincipal @JvmOverloads constructor(
     private val AUTO_SCROLL_DELAY_MS = 3000L // 3 segundos
 
     init {
-        // Inflamos el nuevo layout que contendrá el ViewPager2 y los botones
+        // Infla el layout XML y lo adjunta a esta vista.
         inflate(context, R.layout.menu_principal, this)
 
+        // Carga el GIF animado en el ImageView correspondiente.
         val gifImageView: ImageView = findViewById(R.id.gifImageView)
-
         Glide.with(this)
             .asGif()
-            .load(R.drawable.axo_azul_estudioso_nobg) // <-- 3. ¡CAMBIA ESTO por el nombre de tu archivo GIF!
+            .load(R.drawable.axo_azul_estudioso_nobg) // ¡Recuerda cambiar esto por el nombre de tu GIF!
             .into(gifImageView)
-        // --- FIN DEL CÓDIGO PARA EL GIF ---
 
-
+        // Configura toda la funcionalidad del carrusel.
         setupCarousel()
     }
 
@@ -45,17 +46,23 @@ class MenuPrincipal @JvmOverloads constructor(
         val btnLeft: ImageButton = findViewById(R.id.btnCarouselLeft)
         val btnRight: ImageButton = findViewById(R.id.btnCarouselRight)
 
-        // Aquí creamos los datos de ejemplo para el carrusel.
-        // Asegúrate de tener los drawables (ic_book_24, etc.) en tu carpeta res/drawable.
+        // Define los datos que se mostrarán en cada item del carrusel.
         val carouselItems = listOf(
             CarouselItem("Aprende Vocabulario", "Explora nuevas palabras y expande tu conocimiento.", R.drawable.axo_rojo_saltando),
             CarouselItem("Juega y Practica", "Refuerza tu aprendizaje con divertidos minijuegos.", R.drawable.axo_azuk_saltando),
             CarouselItem("Chatea con Axo", "Practica tus habilidades de conversación con nuestro bot.", R.drawable.axo_blanco)
         )
 
-        viewPager.adapter = CarouselAdapter(carouselItems)
+        // Crea el adaptador y le pasa la lógica de navegación.
+        // Este bloque de código se "entrega" al adaptador para que lo ejecute al hacer clic.
+        val adapter = CarouselAdapter(carouselItems) {
+            // La acción a ejecutar: crear un Intent e iniciar la nueva Activity.
+            val intent = Intent(context, MenuVocabularyActivity::class.java)
+            context.startActivity(intent)
+        }
+        viewPager.adapter = adapter
 
-        // Funcionalidad de los botones de navegación
+        // Configura los botones de navegación izquierda y derecha del carrusel.
         btnLeft.setOnClickListener {
             viewPager.currentItem = if (viewPager.currentItem > 0) viewPager.currentItem - 1 else carouselItems.size - 1
         }
@@ -66,27 +73,33 @@ class MenuPrincipal @JvmOverloads constructor(
     }
 
     private fun startAutoScroll() {
-        stopAutoScroll() // Detiene cualquier desplazamiento anterior
+        stopAutoScroll() // Detiene cualquier desplazamiento anterior para evitar duplicados.
         autoScrollRunnable = Runnable {
-            val nextItem = if (viewPager.currentItem < (viewPager.adapter?.itemCount ?: 0) - 1) viewPager.currentItem + 1 else 0
-            viewPager.setCurrentItem(nextItem, true)
+            val itemCount = viewPager.adapter?.itemCount ?: 0
+            if (itemCount > 0) {
+                val nextItem = (viewPager.currentItem + 1) % itemCount
+                viewPager.setCurrentItem(nextItem, true)
+            }
+            // Vuelve a programar el siguiente desplazamiento.
             autoScrollHandler.postDelayed(autoScrollRunnable!!, AUTO_SCROLL_DELAY_MS)
         }.also {
+            // Inicia el primer desplazamiento.
             autoScrollHandler.postDelayed(it, AUTO_SCROLL_DELAY_MS)
         }
     }
 
     private fun stopAutoScroll() {
+        // Elimina cualquier desplazamiento programado para prevenir fugas de memoria.
         autoScrollRunnable?.let { autoScrollHandler.removeCallbacks(it) }
     }
 
-    // Inicia el auto-scroll cuando la vista es visible
+    // Se llama cuando la vista se adjunta a la ventana (se hace visible).
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         startAutoScroll()
     }
 
-    // Detiene el auto-scroll para prevenir memory leaks cuando la vista no es visible
+    // Se llama cuando la vista se desadjunta de la ventana (deja de ser visible).
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         stopAutoScroll()
