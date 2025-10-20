@@ -32,11 +32,6 @@
         <activity
             android:name=".userSignForms.SignUpActivity"
             android:exported="false" />
-
-
-            android:name=".MainActivity"
-            android:exported="false" />
-
         <!--
             LA CORRECCIÓN ESTÁ AQUÍ:
             La declaración de MenuPrincipalActivity debe estar DENTRO de la etiqueta <application>
@@ -50,11 +45,13 @@
             android:name=".menu_vocabulario.MenuVocabularyActivity"
             android:exported="false" />
 
-      android:name=".forms.IniciarSesion"
-            android:exported="false" />
 
         <activity
             android:name=".forms.Registrarse"
+            android:exported="false" />
+
+        <activity
+            android:name=".forms.IniciarSesion"
             android:exported="false" />
     </application>
 
