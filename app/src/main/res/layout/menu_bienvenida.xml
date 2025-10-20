@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+     1. layout_width y layout_height son "0dp": Esto le dice al ConstraintLayout
+        que el tamaño de esta vista dependerá de las restricciones.
+     2. Se añaden 4 restricciones:
+        Lo "anclamos" a los 4 bordes del layout padre,
+        forzándolo a ocupar todo el espacio disponible.
+   -->
+    <com.proyecto_final.axolingo.art.CLienzoGradientePrincipal
+        android:id="@+id/lienzoGradienteMenuBienvenida"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Ocupa la parte superior. Su altura se define por la restricción
+         inferior que la ancla al inicio de los botones, dejando un margen. -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="Logo de la aplicación"
+        android:padding="25dp"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <com.proyecto_final.axolingo.art.views.leyendaMenuBienvenida
+        android:id="@+id/sloganTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aprende y diviértete"
+        android:textColor="@android:color/white"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsFlow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/buttonsFlow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        app:constraint_referenced_ids="btnIniciarSesion,btnRegistro,btnInfoApp,btnIniciarLocal"
+        app:flow_maxElementsWrap="2"
+        app:flow_wrapMode="chain"
+        app:flow_horizontalStyle="spread"
+        app:flow_verticalStyle="spread"
+        app:flow_horizontalGap="16dp"
+        app:flow_verticalGap="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"/>
+
+    <!-- Simplemente declaramos los 4 botones aquí. Su posición será
+         controlada por el widget Flow a continuación. -->
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
+        android:id="@+id/btnIniciarSesion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="INICIAR SESIÓN"/>
+
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
+        android:id="@+id/btnRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="REGISTRARSE"/>
+
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
+        android:id="@+id/btnInfoApp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="INFO APP" />
+
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
+        android:id="@+id/btnIniciarLocal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="INICIAR LOCAL"/>
+
+    <!-- 4. ORGANIZADOR DE BOTONES (FLOW) -->
+    <!-- Este widget invisible toma los botones por su ID y los organiza
+         en una cuadrícula de 2 columnas (flow_maxElementsWrap="2").
+         Lo anclamos debajo de la Guideline y él se encarga del resto. -->
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

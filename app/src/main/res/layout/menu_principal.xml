@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/grad_menuprincipal">
+
+    <!-- HEADER -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/headerLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="Logo pequeño"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <ImageButton
+                android:id="@+id/btnHelp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_ayuda"
+                android:background="@drawable/circulo_blanco"
+                app:tint="@android:color/black"
+                android:elevation="4dp"
+                android:contentDescription="Ayuda"/>
+            <ImageButton
+                android:id="@+id/btnLogout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_logout"
+                android:background="@drawable/circulo_blanco"
+                app:tint="@android:color/black"
+                android:elevation="4dp"
+                android:contentDescription="Cerrar Sesión"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- GIF -->
+    <ImageView
+        android:id="@+id/gifImageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="GIF animado principal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout"
+        tools:src="@tools:sample/avatars" />
+
+    <!-- CARRUSEL -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/carouselViewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gifImageView"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavContainer" />
+
+    <ImageButton
+        android:id="@+id/btnCarouselLeft"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/icono_flecha_izquierda"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/carouselViewPager"
+        app:layout_constraintTop_toTopOf="@+id/carouselViewPager"
+        app:layout_constraintBottom_toBottomOf="@+id/carouselViewPager"
+        android:contentDescription="Anterior" />
+
+    <ImageButton
+        android:id="@+id/btnCarouselRight"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/icono_flecha_derecha"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/carouselViewPager"
+        app:layout_constraintTop_toTopOf="@+id/carouselViewPager"
+        app:layout_constraintBottom_toBottomOf="@+id/carouselViewPager"
+        android:contentDescription="Siguiente" />
+
+    <!-- FOOTER NAVBAR -->
+    <LinearLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:background="@drawable/footer"
+        android:elevation="8dp"
+        android:paddingTop="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Botón Home (CORREGIDO) -->
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/icono_home"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            app:tint="@android:color/darker_gray"
+            android:contentDescription="Home"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <!-- Botón Settings (CORREGIDO) -->
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/icono_settings"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            app:tint="@android:color/darker_gray"
+            android:contentDescription="Settings"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/icono_flecha"
+        android:background="@drawable/btn_footer"
+        app:tint="@android:color/white"
+        android:elevation="12dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="Acción principal"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
