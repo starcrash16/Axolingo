@@ -34,7 +34,7 @@
             android:textColor="#555555"
             app:layout_constraintTop_toBottomOf="@+id/carouselItemTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnNavigate"
             app:layout_constraintEnd_toStartOf="@+id/carouselItemImage"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"/>
@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/carouselItemDescription"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"/>
+            />
 
         <ImageView
             android:id="@+id/carouselItemImage"

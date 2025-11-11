@@ -53,6 +53,10 @@
         <activity
             android:name=".forms.IniciarSesion"
             android:exported="false" />
+
+        <activity
+            android:name=".selector_palabras.InterfazSelector"
+            android:exported="false" />
     </application>
 
 </manifest>

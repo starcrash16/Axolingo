@@ -14,6 +14,7 @@ import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
 import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
+import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
 class MenuPrincipal @JvmOverloads constructor(
     context: Context,
@@ -53,14 +54,20 @@ class MenuPrincipal @JvmOverloads constructor(
             CarouselItem("Chatea con Axo", "Practica tus habilidades de conversación con nuestro bot.", R.drawable.axo_blanco)
         )
 
+        val carouselItems2 = listOf(
+            CarouselItem("Aprende Vocabulario", "Explora nuevas palabras y expande tu conocimiento.", R.drawable.axo_rojo_saltando)
+        )
+
         // Crea el adaptador y le pasa la lógica de navegación.
         // Este bloque de código se "entrega" al adaptador para que lo ejecute al hacer clic.
         val adapter = CarouselAdapter(carouselItems) {
             // La acción a ejecutar: crear un Intent e iniciar la nueva Activity.
-            val intent = Intent(context, MenuVocabularyActivity::class.java)
+            val intent = Intent(context, /*MenuVocabularyActivity::class.java*/ InterfazSelector::class.java)
             context.startActivity(intent)
         }
+
         viewPager.adapter = adapter
+
 
         // Configura los botones de navegación izquierda y derecha del carrusel.
         btnLeft.setOnClickListener {

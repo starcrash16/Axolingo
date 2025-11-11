@@ -36,15 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener {
             val intent = Intent(this, IniciarSesion::class.java)
-
-            // 5. Inicia la nueva Activity.
             startActivity(intent)
         }
 
         signUpButton.setOnClickListener {
             val intent = Intent(this, Registrarse::class.java)
-
-            // 5. Inicia la nueva Activity.
             startActivity(intent)
         }
     }
