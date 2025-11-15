@@ -33,6 +33,3 @@ local.properties
 .firebase/
 firebase-debug.log
 /app/
-
-# Ignorar carpetas del cache del IDE
-/.kotlin/
