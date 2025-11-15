@@ -54,6 +54,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.auth) // Esta usa el catálogo de versiones
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.code.gson:gson:2.13.2")  //biblioteca para convertir texto JSON a lista de objetos
 
 
 }

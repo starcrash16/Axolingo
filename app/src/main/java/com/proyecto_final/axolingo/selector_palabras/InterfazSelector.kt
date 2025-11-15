@@ -1,5 +1,6 @@
 package com.proyecto_final.axolingo.selector_palabras
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.R
+import java.io.InputStream
 import kotlin.collections.listOf
 
 class InterfazSelector : AppCompatActivity() {
@@ -19,7 +23,7 @@ class InterfazSelector : AppCompatActivity() {
     val instruccion = "Traduce la siguiente frase\n"
     var respCorrectas: Int = 0
 
-    val oracion: List<List<String>> = listOf(
+    /*val oracion: List<List<String>> = listOf(
         listOf("My name is Juanito"),
         listOf("Hello world"),
         listOf("The sky is blue")
@@ -33,20 +37,32 @@ class InterfazSelector : AppCompatActivity() {
         listOf("Mi nombre es Juanito"),
         listOf("Hola mundo"),
         listOf("El cielo es azul")
-    )
+    )*/
+    lateinit var ejercicios: List<Ejercicio>
+    val numero_ejercicios = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.menu_selector)
         container = findViewById<ViewGroup>(R.id.container)
 
+        var listaEjercicios: List<Ejercicio> = cargarJSON(this)
+        ejercicios = listaEjercicios.shuffled().take(numero_ejercicios)
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar?.max = 100
         cargarSiguientePregunta()
     }
 
+    private fun cargarJSON(context: Context): List<Ejercicio> {
+        val inputStream: InputStream = context.resources.openRawResource(R.raw.palabras_traduccion)
+        val jsonString = inputStream.bufferedReader().use { it.readText() }
+        val gson = Gson()
+        val tipoLista = object: TypeToken<List<Ejercicio>>() {}.type
+        return gson.fromJson(jsonString, tipoLista)
+    }
+
     private fun cargarSiguientePregunta() {
-        if (indiceActual >= palabras.size) {
+        if (indiceActual >= numero_ejercicios) {
             Toast.makeText(this, "¡Completaste todas las frases!", Toast.LENGTH_LONG).show()
             container.removeAllViews()
             val texto = "Aciertos: $respCorrectas de $indiceActual"
@@ -64,9 +80,9 @@ class InterfazSelector : AppCompatActivity() {
 
         val control = ControlSelector(this)
         control.background = getDrawable(R.drawable.edittext_form)
-        control.instrucciones = instruccion + oracion[indiceActual].joinToString(" ")
-        control.respuesta = respuesta[indiceActual].joinToString(" ")
-        control.cargarBancoDePalabras(palabras[indiceActual])
+        control.instrucciones = instruccion + ejercicios[indiceActual].sentence
+        control.respuesta = ejercicios[indiceActual].answer//.joinToString(" ")
+        control.cargarBancoDePalabras(ejercicios[indiceActual].words)
 
         control.setComprobarListener {
             if (control.comprobarRespuesta()) {
@@ -76,7 +92,7 @@ class InterfazSelector : AppCompatActivity() {
                 Toast.makeText(this, "Incorrecto", Toast.LENGTH_SHORT).show()
             }
             indiceActual++
-            progressBar?.progress = 100 / palabras.size * indiceActual
+            progressBar?.progress = 100 / numero_ejercicios * indiceActual
             cargarSiguientePregunta()
         }
         container.addView(control)
