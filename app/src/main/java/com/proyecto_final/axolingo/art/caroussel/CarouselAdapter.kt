@@ -27,15 +27,10 @@ class CarouselAdapter(
             imageView.setImageResource(item.imageResId)
 
             // 2. Lógica para mostrar el botón solo en el primer item.
-            /*if (position == 0) {*/
-                navigateButton.visibility = View.VISIBLE
-                // 3. Cuando se hace clic, se ejecuta la instrucción 'onNavigateClick' que recibimos.
-                navigateButton.setOnClickListener {
-                    onNavigateClick(item)
-                }/*
-            } else {
-                navigateButton.visibility = View.GONE
-            }*/
+            navigateButton.visibility = View.VISIBLE
+            navigateButton.setOnClickListener {
+                onNavigateClick(item)
+            }
         }
     }
 

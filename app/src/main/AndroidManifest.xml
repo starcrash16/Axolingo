@@ -42,9 +42,15 @@
             android:exported="false" />
 
         <activity
-            android:name=".menu_vocabulario.MenuVocabularyActivity"
+            android:name=".leccion_ingles.MenuLeccionInglesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".leccion_mate.MenuLeccionMateActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".leccion_ingles.SpellingBeeActivity"
+            android:exported="false" />
 
         <activity
             android:name=".forms.Registrarse"
@@ -62,10 +68,23 @@
             android:name=".pizarra.InterfazPizarra"
             android:exported="false" />
 
+        <activity
+            android:name=".leccion_ingles.readingActivity.ReadingActivity"
+            android:exported="false" />
+      
+        <activity
+            android:name=".leccion_ingles.readingActivity.QuestionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".leccion_ingles.VocabularyActivity"
+            android:exported="false"/>
+
         <!-- solicitando el modelo para digitos -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="digit" />
+
     </application>
 
 </manifest>

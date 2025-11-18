@@ -59,4 +59,6 @@ dependencies {
     //implementation("com.google.mlkit:digital-ink-recognition:18.1.0")  //dependencia para convertir el trazo a texto
 
 
+    //implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }

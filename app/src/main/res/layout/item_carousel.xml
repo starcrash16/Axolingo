@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardCornerRadius="16dp"
@@ -12,6 +13,7 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <!-- 1. Título -->
         <TextView
             android:id="@+id/carouselItemTitle"
             android:layout_width="0dp"
@@ -20,45 +22,49 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/carouselItemImage"
-            android:layout_marginEnd="16dp"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!-- 2. Descripción -->
         <TextView
             android:id="@+id/carouselItemDescription"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:text="Descripción del item que puede ocupar varias líneas."
             android:textSize="14sp"
             android:textColor="#555555"
+            android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/carouselItemTitle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btnNavigate"
-            app:layout_constraintEnd_toStartOf="@+id/carouselItemImage"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
 
+        <!-- 3. Botón "Ir" -->
         <Button
             android:id="@+id/btnNavigate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ir ahora"
-            android:layout_marginTop="8dp"
+            android:text="Ir"
+            android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@+id/carouselItemDescription"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/carouselItemDescription"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- 4. Imagen -->
         <ImageView
             android:id="@+id/carouselItemImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/btnNavigate"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/axo_azuk_saltando"/>
+            android:src="@drawable/axo_azuk_saltando"
+            tools:src="@drawable/axo_azuk_saltando"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
+
