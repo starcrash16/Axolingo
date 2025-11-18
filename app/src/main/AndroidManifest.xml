@@ -61,8 +61,18 @@
             android:exported="false" />
 
         <activity
-            android:name=".leccion_ingles.ReadingActivity"
+            android:name=".leccion_ingles.readingActivity.ReadingActivity"
             android:exported="false" />
+        <activity
+            android:name=".leccion_ingles.readingActivity.QuestionActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".leccion_ingles.VocabularyActivity"
+            android:exported="false"/>
+
+
+
     </application>
 
 </manifest>

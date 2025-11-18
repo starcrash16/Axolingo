@@ -1,6 +1,6 @@
 // File: ReadingActivity.kt
 
-package com.proyecto_final.axolingo.leccion_ingles
+package com.proyecto_final.axolingo.leccion_ingles.readingActivity
 
 import android.os.Bundle
 import android.widget.Button
@@ -9,8 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.R
 import java.util.Random
+import android.content.Intent
 
 // --- MAPPING CONSTANTS ---
 // We map the JSON field names to their index for sequential reading.
@@ -61,7 +63,7 @@ class ReadingActivity : AppCompatActivity() {
         // Use Gson to parse the array of Story objects
         val gson = Gson()
         // Type token to help Gson parse a List<Story> correctly
-        val type = com.google.gson.reflect.TypeToken.getParameterized(List::class.java, Story::class.java).type
+        val type = TypeToken.getParameterized(List::class.java, Story::class.java).type
         allStories = gson.fromJson(jsonString, type)
 
         // Select a random story
@@ -77,16 +79,28 @@ class ReadingActivity : AppCompatActivity() {
         currentStage++
 
         if (currentStage < TOTAL_STAGES) {
+            // La historia continúa, actualiza la pantalla
             updateUIForCurrentStage()
         } else {
-            // Story is complete! Time to transition to Questions.
-            btnNext.text = "Start Questions"
-            tvDescription.text = "You finished the story! Get ready for the quiz."
-            // In a real app, you would start a new activity here:
-            // val intent = Intent(this, QuestionActivity::class.java)
-            // intent.putExtra("story_data", Gson().toJson(currentStory))
-            // startActivity(intent)
-            Toast.makeText(this, "Transitioning to QuestionActivity...", Toast.LENGTH_LONG).show()
+            // La historia ha terminado. Prepara la transición al cuestionario.
+
+            btnNext.text = "Start Quiz" // Cambia el texto del botón
+            tvDescription.text = "You finished the story! Tap the button to start the quiz."
+
+            // 1. Serializa el objeto 'currentStory' a una cadena JSON
+            val storyJson = Gson().toJson(currentStory)
+
+            // 2. Crea el Intent para iniciar QuestionActivity
+            val intent = Intent(this, QuestionActivity::class.java)
+
+            // 3. Adjunta la cadena JSON al Intent para que QuestionActivity pueda acceder a los datos
+            intent.putExtra("story_data", storyJson)
+
+            // 4. Inicia la nueva Activity
+            startActivity(intent)
+
+            // 5. Opcional: Finaliza ReadingActivity para que el usuario no pueda volver con el botón 'Back'
+            finish()
         }
     }
 
@@ -125,7 +139,9 @@ class ReadingActivity : AppCompatActivity() {
             packageName
         )
     }
+
 }
+
 
 // --- CONSTANT JSON STRING ---
 private const val JSON_STORIES = """

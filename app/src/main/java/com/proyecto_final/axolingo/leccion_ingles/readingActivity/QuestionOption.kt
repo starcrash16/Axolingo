@@ -1,6 +1,6 @@
 // File: StoryData.kt (Data Classes for JSON Parsing)
 
-package com.proyecto_final.axolingo.leccion_ingles
+package com.proyecto_final.axolingo.leccion_ingles.readingActivity
 
 // Represents a single multiple-choice option (though not strictly necessary, good practice)
 data class QuestionOption(
