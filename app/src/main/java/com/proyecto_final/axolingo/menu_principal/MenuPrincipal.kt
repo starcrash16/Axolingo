@@ -13,7 +13,11 @@ import com.bumptech.glide.Glide
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
-import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
+
+// Importa las Activities a las que quieres navegar
+import com.proyecto_final.axolingo.leccion_ingles.MenuLeccionInglesActivity
+import com.proyecto_final.axolingo.leccion_mate.MenuLeccionMateActivity
+// import com.proyecto_final.axolingo.menu_chat.MenuChatActivity // <-- Descomenta cuando la tengas
 
 class MenuPrincipal @JvmOverloads constructor(
     context: Context,
@@ -48,19 +52,30 @@ class MenuPrincipal @JvmOverloads constructor(
 
         // Define los datos que se mostrarán en cada item del carrusel.
         val carouselItems = listOf(
-            CarouselItem("Aprende Vocabulario", "Explora nuevas palabras y expande tu conocimiento.", R.drawable.axo_rojo_saltando),
-            CarouselItem("Juega y Practica", "Refuerza tu aprendizaje con divertidos minijuegos.", R.drawable.axo_azuk_saltando),
+            CarouselItem("Learn Inglés!!!", "Explora nuevas palabras y expande tu conocimiento de esta lengua.", R.drawable.axo_rojo_saltando),
+            CarouselItem("Matemáticas con Axo", "Refuerza tu aprendizaje con divertidos minijuegos.", R.drawable.axo_azuk_saltando),
             CarouselItem("Chatea con Axo", "Practica tus habilidades de conversación con nuestro bot.", R.drawable.axo_blanco)
         )
 
-        // Crea el adaptador y le pasa la lógica de navegación.
-        // Este bloque de código se "entrega" al adaptador para que lo ejecute al hacer clic.
-        val adapter = CarouselAdapter(carouselItems) {
-            // La acción a ejecutar: crear un Intent e iniciar la nueva Activity.
-            val intent = Intent(context, MenuVocabularyActivity::class.java)
-            context.startActivity(intent)
+        // --- INICIO DE LA LÓGICA DE NAVEGACIÓN ---
+        // Al crear el adaptador, le pasamos un bloque de código (lambda)
+        // que recibe el 'clickedItem' sobre el que se hizo clic.
+        val adapter = CarouselAdapter(carouselItems) { clickedItem ->
+
+            // Usamos un 'when' (como un switch) para revisar el título del item
+            // y decidir qué Activity iniciar.
+            val intent = when (clickedItem.title) {
+                "Learn Inglés!!!" -> Intent(context, MenuLeccionInglesActivity::class.java)
+                "Matemáticas con Axo" -> Intent(context, MenuLeccionMateActivity::class.java)
+                "Chatea con Axo" -> null // Reemplaza con: Intent(context, MenuChatActivity::class.java)
+                else -> null
+            }
+
+            // Inicia la Activity solo si el intent no es nulo.
+            intent?.let { context.startActivity(it) }
         }
         viewPager.adapter = adapter
+        // --- FIN DE LA LÓGICA DE NAVEGACIÓN ---
 
         // Configura los botones de navegación izquierda y derecha del carrusel.
         btnLeft.setOnClickListener {
