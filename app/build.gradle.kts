@@ -54,6 +54,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.auth) // Esta usa el catálogo de versiones
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
-
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 }
