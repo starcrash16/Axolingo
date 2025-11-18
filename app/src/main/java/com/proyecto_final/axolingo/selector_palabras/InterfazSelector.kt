@@ -13,7 +13,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.R
 import java.io.InputStream
-import kotlin.collections.listOf
 
 class InterfazSelector : AppCompatActivity() {
 
@@ -23,32 +22,17 @@ class InterfazSelector : AppCompatActivity() {
     val instruccion = "Traduce la siguiente frase\n"
     var respCorrectas: Int = 0
 
-    /*val oracion: List<List<String>> = listOf(
-        listOf("My name is Juanito"),
-        listOf("Hello world"),
-        listOf("The sky is blue")
-    )
-    val palabras: List<List<String>> = listOf(
-        listOf("Mi", "nombre", "es", "Juanito", "Hola", "mundo"),
-        listOf("Mi", "nombre", "es", "Juanito", "Hola", "mundo"),
-        listOf("verde", "cielos", "El", "cielo", "es", "azul")
-    )
-    val respuesta: List<List<String>> = listOf(
-        listOf("Mi nombre es Juanito"),
-        listOf("Hola mundo"),
-        listOf("El cielo es azul")
-    )*/
     lateinit var ejercicios: List<Ejercicio>
     val numero_ejercicios = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.menu_selector)
-        container = findViewById<ViewGroup>(R.id.container)
+        container = findViewById(R.id.container)
 
         var listaEjercicios: List<Ejercicio> = cargarJSON(this)
         ejercicios = listaEjercicios.shuffled().take(numero_ejercicios)
-        progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar = findViewById(R.id.progressBar)
         progressBar?.max = 100
         cargarSiguientePregunta()
     }

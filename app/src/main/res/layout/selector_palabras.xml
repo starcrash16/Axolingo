@@ -14,7 +14,7 @@
         android:textColor="@color/black"
         android:textSize="25sp" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -23,14 +23,14 @@
 
         <GridLayout
             android:id="@+id/respuestaContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:columnCount="3"
             android:alignmentMode="alignBounds"
             android:layout_gravity="center_horizontal"
             android:useDefaultMargins="true"
             android:padding="4dp" />
-    </ScrollView>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -47,14 +47,14 @@
 
         <GridLayout
             android:id="@+id/bancoContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:columnCount="3"
             android:alignmentMode="alignBounds"
             android:layout_gravity="center_horizontal"
             android:useDefaultMargins="true"
             android:padding="4dp" />
-    </ScrollView>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnRespuesta"

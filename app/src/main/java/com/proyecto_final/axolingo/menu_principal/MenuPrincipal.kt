@@ -14,6 +14,7 @@ import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
 import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
+import com.proyecto_final.axolingo.pizarra.InterfazPizarra
 import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
 class MenuPrincipal @JvmOverloads constructor(
@@ -62,7 +63,7 @@ class MenuPrincipal @JvmOverloads constructor(
         // Este bloque de código se "entrega" al adaptador para que lo ejecute al hacer clic.
         val adapter = CarouselAdapter(carouselItems) {
             // La acción a ejecutar: crear un Intent e iniciar la nueva Activity.
-            val intent = Intent(context, /*MenuVocabularyActivity::class.java*/ InterfazSelector::class.java)
+            val intent = Intent(context, /*MenuVocabularyActivity::class.java*/ InterfazPizarra::class.java)
             context.startActivity(intent)
         }
 

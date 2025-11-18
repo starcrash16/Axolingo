@@ -1,8 +1,13 @@
 package com.proyecto_final.axolingo.selector_palabras
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
+import android.view.DragEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.GridLayout
@@ -29,6 +34,37 @@ class ControlSelector : LinearLayout {
             respuestaCorrecta = value
         }
 
+    private val dragListener = OnDragListener { view, event ->
+        val draggedView = event.localState as TextView
+        when (event.action) {
+            DragEvent.ACTION_DRAG_STARTED -> { true }
+            DragEvent.ACTION_DRAG_ENTERED -> {
+                view.setBackgroundColor(Color.rgb(216, 216, 216))
+                true
+            }
+            DragEvent.ACTION_DRAG_EXITED -> {   //volver al valor original
+                view.setBackgroundResource(android.R.color.transparent)
+                true
+            }
+            DragEvent.ACTION_DROP -> {
+                val targetContainer = view as GridLayout
+                val originalParent = draggedView.parent as ViewGroup
+
+                if (targetContainer != originalParent) {
+                    originalParent.removeView(draggedView)
+                    targetContainer.addView(draggedView)
+                }
+                true
+            }
+            DragEvent.ACTION_DRAG_ENDED -> {
+                draggedView.visibility = View.VISIBLE
+                view.setBackgroundResource(android.R.color.transparent)
+                true
+            }
+            else -> false
+        }
+    }
+
     constructor(context: Context?) : super(context){
         inicializar(null)
     }
@@ -48,9 +84,11 @@ class ControlSelector : LinearLayout {
         respuestaContainer = findViewById(R.id.respuestaContainer)
         bancoContainer = findViewById(R.id.bancoContainer)
         btnRespuesta = findViewById(R.id.btnRespuesta)
-        val attrs = context.obtainStyledAttributes(attrs, R.styleable.ControlSelector)
-        txtInstrucciones?.text = attrs.getString(R.styleable.ControlSelector_instrucciones)
-        respuestaCorrecta = attrs.getString(R.styleable.ControlSelector_respuesta)
+        respuestaContainer?.setOnDragListener(dragListener)
+        bancoContainer?.setOnDragListener(dragListener)
+        val attrs = context.obtainStyledAttributes(attrs, R.styleable.Preguntas)
+        txtInstrucciones?.text = attrs.getString(R.styleable.Preguntas_instrucciones)
+        respuestaCorrecta = attrs.getString(R.styleable.Preguntas_respuesta)
         attrs.recycle()
     }
 
@@ -80,6 +118,16 @@ class ControlSelector : LinearLayout {
                 respuestaContainer?.removeView(clickedWord)
                 bancoContainer?.addView(clickedWord)
             }
+        }
+
+        //listener para arrastrar la palabra
+        wordView.setOnLongClickListener { view ->
+            val textView = view as TextView
+            val item = ClipData.Item(textView.text)
+            val dragData = ClipData(textView.text, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
+            val shadowBuilder = View.DragShadowBuilder(view)
+            view.startDragAndDrop(dragData, shadowBuilder, view, 0)
+            true
         }
         return wordView
     }
