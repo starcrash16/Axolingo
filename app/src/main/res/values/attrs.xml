@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="Preguntas">
+        <attr name="instrucciones" format="string" />
+        <attr name="respuesta" format="string" />
+    </declare-styleable>
+
     <declare-styleable name="BotonLeccion">
         <attr name="mainButtonColor" format="color" />
         <attr name="shadowButtonColor" format="color" />

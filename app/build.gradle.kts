@@ -54,6 +54,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation(libs.firebase.auth) // Esta usa el catálogo de versiones
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.13.2")  //biblioteca para convertir texto JSON a lista de objetos
+    implementation("com.google.mlkit:text-recognition:16.0.0")  //dependencia para convertir el trazo a texto
+    //implementation("com.google.mlkit:digital-ink-recognition:18.1.0")  //dependencia para convertir el trazo a texto
+
+
+    //implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 }

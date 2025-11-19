@@ -1,0 +1,67 @@
+[
+  {
+    "sentence": "My name is Juanito",
+    "words": [ "Mi", "nombre", "es", "Juanito", "Hola", "mundo" ],
+    "answer": "Mi nombre es Juanito"
+  },
+  {
+    "sentence": "Hello World",
+    "words": [ "Mi", "nombre", "es", "Juanito", "Hola", "mundo" ],
+    "answer": "Hola mundo"
+  },
+  {
+    "sentence": "The sky is blue",
+    "words": [ "verde", "cielos", "El", "cielo", "es", "azul" ],
+    "answer": "El cielo es azul"
+  },
+  {
+    "sentence": "The apple is red",
+    "words": [ "La", "manzana", "es", "roja", "verde", "El", "pera" ],
+    "answer": "La manzana es roja"
+  },
+  {
+    "sentence": "I have a dog",
+    "words": [ "Yo", "tengo", "un", "perro", "gato", "Nosotros", "veo" ],
+    "answer": "Yo tengo un perro"
+  },
+  {
+    "sentence": "The sun is yellow",
+    "words": [ "La", "luna", "El", "sol", "es", "amarillo", "azul" ],
+    "answer": "El sol es amarillo"
+  },
+  {
+    "sentence": "I like to play",
+    "words": [ "No", "Me", "gusta", "jugar", "comer", "dormir", "Yo" ],
+    "answer": "Me gusta jugar"
+  },
+  {
+    "sentence": "This is my mom",
+    "words": [ "Esta", "es", "mi", "mamá", "papá", "casa", "Ese" ],
+    "answer": "Esta es mi mamá"
+  },
+  {
+    "sentence": "The cat is black",
+    "words": [ "El", "gato", "es", "blanco", "negro", "perro", "La" ],
+    "answer": "El gato es negro"
+  },
+  {
+    "sentence": "I can run",
+    "words": [ "Yo", "puedo", "correr", "saltar", "caminar", "Ella", "soy" ],
+    "answer": "Yo puedo correr"
+  },
+  {
+    "sentence": "The fish swims",
+    "words": [ "El", "pez", "nada", "vuela", "gato", "Los", "agua" ],
+    "answer": "El pez nada"
+  },
+  {
+    "sentence": "I am happy",
+    "words": [ "Yo", "estoy", "feliz", "triste", "Ella", "tiene", "hambre" ],
+    "answer": "Yo estoy feliz"
+  },
+  {
+    "sentence": "Where is the ball?",
+    "words": [ "¿Dónde", "está", "la", "pelota?", "gato?", "roja", "Mi" ],
+    "answer": "¿Dónde está la pelota?"
+  }
+]

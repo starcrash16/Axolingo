@@ -61,8 +61,17 @@
             android:exported="false" />
 
         <activity
+            android:name=".selector_palabras.InterfazSelector"
+            android:exported="false" />
+
+        <activity
+            android:name=".pizarra.InterfazPizarra"
+            android:exported="false" />
+
+        <activity
             android:name=".leccion_ingles.readingActivity.ReadingActivity"
             android:exported="false" />
+      
         <activity
             android:name=".leccion_ingles.readingActivity.QuestionActivity"
             android:exported="false" />
@@ -71,7 +80,10 @@
             android:name=".leccion_ingles.VocabularyActivity"
             android:exported="false"/>
 
-
+        <!-- solicitando el modelo para digitos -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="digit" />
 
     </application>
 

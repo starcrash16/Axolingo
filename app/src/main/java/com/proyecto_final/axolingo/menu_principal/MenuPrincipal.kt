@@ -13,6 +13,9 @@ import com.bumptech.glide.Glide
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
+import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
+import com.proyecto_final.axolingo.pizarra.InterfazPizarra
+import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
 // Importa las Activities a las que quieres navegar
 import com.proyecto_final.axolingo.leccion_ingles.MenuLeccionInglesActivity
@@ -74,8 +77,10 @@ class MenuPrincipal @JvmOverloads constructor(
             // Inicia la Activity solo si el intent no es nulo.
             intent?.let { context.startActivity(it) }
         }
+
         viewPager.adapter = adapter
         // --- FIN DE LA LÓGICA DE NAVEGACIÓN ---
+
 
         // Configura los botones de navegación izquierda y derecha del carrusel.
         btnLeft.setOnClickListener {

@@ -32,3 +32,4 @@ local.properties
 # =================================
 .firebase/
 firebase-debug.log
+/app/

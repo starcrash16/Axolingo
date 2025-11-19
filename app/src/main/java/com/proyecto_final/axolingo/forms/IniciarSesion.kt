@@ -17,7 +17,10 @@ class IniciarSesion : AppCompatActivity(){
         binding = InicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        binding.regButton.setOnClickListener {
+            val intent = Intent(this, Registrarse::class.java)
+            startActivity(intent)
+        }
     }
 }
 
