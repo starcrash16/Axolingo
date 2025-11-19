@@ -6,6 +6,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.leccion_ingles.readingActivity.ReadingActivity
+import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
 class MenuLeccionInglesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,13 @@ class MenuLeccionInglesActivity : AppCompatActivity() {
 
         btnVocab.setOnClickListener {
             val intent = Intent(this, VocabularyActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnTranslator: Button = findViewById(R.id.btnTranslator)
+
+        btnTranslator.setOnClickListener {
+            val intent = Intent(this, InterfazSelector::class.java)
             startActivity(intent)
         }
     }
