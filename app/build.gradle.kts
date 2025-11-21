@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -57,8 +58,15 @@ dependencies {
     implementation("com.google.code.gson:gson:2.13.2")  //biblioteca para convertir texto JSON a lista de objetos
     implementation("com.google.mlkit:text-recognition:16.0.0")  //dependencia para convertir el trazo a texto
     //implementation("com.google.mlkit:digital-ink-recognition:18.1.0")  //dependencia para convertir el trazo a texto
-
-
     //implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    val room_version = "2.8.4"  //implementacion de room para la bd
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    //corrutinas de kotlin
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.room:room-ktx:2.6.1")  //corrutinas para Room
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")  //corrutinas para ViewModel
 }
