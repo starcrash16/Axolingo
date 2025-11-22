@@ -95,6 +95,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_form"
             android:textColor="@color/black"
+            android:inputType="textPassword"
             android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@+id/forgot_password"
             app:layout_constraintEnd_toEndOf="parent"

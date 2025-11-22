@@ -34,9 +34,9 @@ class IniciarSesion : AppCompatActivity(){
                 val userData = binding.editUser.text.toString().trim()
                 val userPass = binding.editPassword.text.toString().trim()
                 loginViewModel.loginUsuario(userData, userPass,
-                    onSuccess = {
+                    onSuccess = { user ->
                         runOnUiThread {
-                            showSuccessDialog(userData)
+                            showSuccessDialog(user.user)
                         }
                     },
                     onConflict = {
@@ -68,10 +68,10 @@ class IniciarSesion : AppCompatActivity(){
         return isValid
     }
 
-    private fun showSuccessDialog(user: String) {
+    private fun showSuccessDialog(nombreUsuario: String?) {
         AlertDialog.Builder(this)
             .setTitle("Inicio de sesión exitoso")
-            .setMessage("Bienvenido $user")
+            .setMessage("Bienvenido $nombreUsuario")
             .setPositiveButton("Aceptar") { dialog, _ ->
                 dialog.dismiss()
                 val intent = Intent(this, MenuPrincipalActivity::class.java)
@@ -90,5 +90,3 @@ class IniciarSesion : AppCompatActivity(){
             .show()
     }
 }
-
-
