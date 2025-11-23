@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
+import com.proyecto_final.axolingo.configuraciones.ConfiguracionesUsuarioActivity
 import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
 import com.proyecto_final.axolingo.pizarra.InterfazPizarra
 import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
@@ -20,6 +21,7 @@ import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 // Importa las Activities a las que quieres navegar
 import com.proyecto_final.axolingo.leccion_ingles.MenuLeccionInglesActivity
 import com.proyecto_final.axolingo.leccion_mate.MenuLeccionMateActivity
+import com.proyecto_final.axolingo.art.dialogs.JokeDialog
 // import com.proyecto_final.axolingo.menu_chat.MenuChatActivity // <-- Descomenta cuando la tengas
 
 class MenuPrincipal @JvmOverloads constructor(
@@ -34,18 +36,42 @@ class MenuPrincipal @JvmOverloads constructor(
     private val AUTO_SCROLL_DELAY_MS = 3000L // 3 segundos
 
     init {
-        // Infla el layout XML y lo adjunta a esta vista.
         inflate(context, R.layout.menu_principal, this)
 
-        // Carga el GIF animado en el ImageView correspondiente.
+        // 1. Cargar GIF
         val gifImageView: ImageView = findViewById(R.id.gifImageView)
         Glide.with(this)
             .asGif()
-            .load(R.drawable.axo_azul_estudioso_nobg) // ¡Recuerda cambiar esto por el nombre de tu GIF!
+            .load(R.drawable.axo_azul_estudioso_nobg)
             .into(gifImageView)
 
-        // Configura toda la funcionalidad del carrusel.
+        // 2. Configurar Carrusel
         setupCarousel()
+
+        // --- NUEVA FUNCIONALIDAD: BOTÓN SETTINGS ---
+        // Encontramos el botón por su ID
+        val btnSettings: ImageButton = findViewById(R.id.btnSettings)
+
+        // Asignamos el listener para navegar
+        btnSettings.setOnClickListener {
+            val intent = Intent(context, ConfiguracionesUsuarioActivity::class.java)
+            context.startActivity(intent)
+        }
+        // -------------------------------------------
+
+        // Opcional: Configurar también el botón Home para que refresque o haga algo si es necesario
+        val btnHome: ImageButton = findViewById(R.id.btnHome)
+        btnHome.setOnClickListener {
+            // Como ya estamos en el menú principal, quizás quieras hacer un scroll al inicio
+            // o simplemente no hacer nada.
+        }
+
+        // --- FUNCIONALIDAD: BOTÓN FAB (Chistes) ---
+        val fabButton: ImageButton = findViewById(R.id.btn_chiste)
+        fabButton.setOnClickListener {
+            JokeDialog(context).show()
+        }
+        // -------------------------------------------
     }
 
     private fun setupCarousel() {

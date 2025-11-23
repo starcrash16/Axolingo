@@ -12,14 +12,14 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
-import kotlin.random.Random
 import java.io.InputStreamReader
+import kotlin.random.Random
 
-class SpellingBeeActivity : AppCompatActivity() {
+class SpellingBeeActivity : BaseActivity() {
 
     // sourceZone ahora es ViewGroup para aceptar FlexboxLayout
     private lateinit var sourceZone: ViewGroup

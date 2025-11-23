@@ -3,12 +3,12 @@ package com.proyecto_final.axolingo.leccion_ingles
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.leccion_ingles.readingActivity.ReadingActivity
 import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
-class MenuLeccionInglesActivity : AppCompatActivity() {
+class MenuLeccionInglesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.menu_leccion_ingles)

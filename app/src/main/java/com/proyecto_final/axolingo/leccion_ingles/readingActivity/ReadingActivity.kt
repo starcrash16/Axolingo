@@ -7,9 +7,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
 import java.util.Random
 import android.content.Intent
@@ -22,7 +22,7 @@ private const val STAGE_DEV_2 = 2
 private const val STAGE_END = 3
 private const val TOTAL_STAGES = 4
 
-class ReadingActivity : AppCompatActivity() {
+class ReadingActivity : BaseActivity() {
 
     // UI elements (lateinit for setup in onCreate)
     private lateinit var tvTitle: TextView

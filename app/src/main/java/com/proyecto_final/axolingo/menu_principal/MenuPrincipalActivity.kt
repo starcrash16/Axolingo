@@ -1,11 +1,11 @@
 package com.proyecto_final.axolingo.menu_principal
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.views.MenuPrincipal
 
 // Esta es la Activity que sirve como "pantalla" para tu vista personalizada.
-class MenuPrincipalActivity : AppCompatActivity() {
+class MenuPrincipalActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

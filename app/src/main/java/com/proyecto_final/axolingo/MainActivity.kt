@@ -2,7 +2,6 @@ package com.proyecto_final.axolingo
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
 import com.proyecto_final.axolingo.forms.IniciarSesion
@@ -12,7 +11,7 @@ import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 // Asegúrate de que tu layout de bienvenida se llama 'menu_bienvenida.xml'
 // y que contiene un botón con el id 'btnInfoApp'.
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

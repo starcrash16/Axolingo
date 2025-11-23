@@ -10,9 +10,9 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.leccion_ingles.leccion_ingles.LineDrawingView
 import java.util.Collections
@@ -21,7 +21,7 @@ import kotlin.math.abs
 // Data class to mirror the JSON structure for a single item
 data class VocabItem(val word: String, val definition: String)
 
-class VocabularyActivity : AppCompatActivity() {
+class VocabularyActivity : BaseActivity() {
 
     private lateinit var lineDrawingView: LineDrawingView
     private lateinit var tvCompletionMessage: TextView

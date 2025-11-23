@@ -2,12 +2,12 @@ package com.proyecto_final.axolingo.forms
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.databinding.ActivitySignUpBinding
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
 import com.proyecto_final.axolingo.databinding.RegistroBinding
 
-class IniciarSesion : AppCompatActivity(){
+class IniciarSesion : BaseActivity(){
     private lateinit var binding: InicioSesionBinding
 
 
