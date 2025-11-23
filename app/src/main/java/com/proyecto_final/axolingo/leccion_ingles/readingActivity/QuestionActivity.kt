@@ -32,6 +32,9 @@ class QuestionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.question_layout)
 
+        // Apply shaded background
+        window.setBackgroundDrawableResource(R.drawable.axo_biblioteca_shaded)
+
         // 1. Initialize UI components
         tvQuestion = findViewById(R.id.tv_question)
         radioGroupOptions = findViewById(R.id.radio_group_options)

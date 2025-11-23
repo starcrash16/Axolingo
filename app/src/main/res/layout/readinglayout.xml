@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@drawable/axo_biblioteca"
     tools:context=".leccion_ingles.readingActivity.ReadingActivity">
 
     <TextView
@@ -13,6 +14,9 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
+        android:background="@drawable/border_background_white"
+        android:padding="8dp"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,30 +25,35 @@
     <ImageView
         android:id="@+id/iv_story_image"
         android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
         app:layout_constraintTop_toBottomOf="@id/tv_story_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         android:contentDescription="Current scene from the axolotl story"
         tools:src="@drawable/placeholder_default" />
 
     <TextView
         android:id="@+id/tv_story_description"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:textSize="18sp"
-        android:padding="8dp"
+        android:padding="16dp"
         android:gravity="center_vertical"
+        android:background="@drawable/border_background_white"
+        android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/iv_story_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_next_stage"
         tools:text="This is the beginning of the story..." />
 
-    <Button
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
         android:id="@+id/btn_next_stage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
