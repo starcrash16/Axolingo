@@ -5,14 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.proyecto_final.axolingo.data.db.AppDatabase
-import com.proyecto_final.axolingo.databinding.ActivitySignUpBinding
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
-import com.proyecto_final.axolingo.databinding.RegistroBinding
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
-import com.proyecto_final.axolingo.views.MenuPrincipal
-import kotlin.math.log
 
-class IniciarSesion : AppCompatActivity(){
+class IniciarSesion : AppCompatActivity() {
     private lateinit var binding: InicioSesionBinding
     private lateinit var loginViewModel: LoginViewModel
 
@@ -23,6 +19,11 @@ class IniciarSesion : AppCompatActivity(){
         loginViewModel = LoginViewModel(userDao)
         binding = InicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.forgotPassword.setOnClickListener {
+            val intent = Intent(this, CambiarContra::class.java)
+            startActivity(intent)
+        }
 
         binding.regButton.setOnClickListener {
             val intent = Intent(this, Registrarse::class.java)

@@ -1,13 +1,9 @@
 package com.proyecto_final.axolingo.forms
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
-import androidx.room.Room
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.data.entity.User
 import com.proyecto_final.axolingo.databinding.RegistroBinding
@@ -30,6 +26,12 @@ class Registrarse : AppCompatActivity(){
                     user = binding.editUser.text.toString().trim(),
                     email = binding.editEmail.text.toString().trim(),
                     password = binding.editPassword.text.toString().trim(),
+                    sc_spell = 0.0f,
+                    sc_reading = 0.0f,
+                    sc_vocab = 0.0f,
+                    sc_transl = 0.0f,
+                    sc_board = 0.0f,
+                    sc_shapes = 0.0f
                 )
                 registroViewModel.registrarUsuario(
                     user,

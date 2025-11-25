@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.proyecto_final.axolingo.data.dao.UserDao
 import com.proyecto_final.axolingo.data.entity.User
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao() : UserDao
     companion object {
@@ -18,10 +18,11 @@ abstract class AppDatabase : RoomDatabase() {
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    DATABASE_NAME
-                ).build()
+                                context.applicationContext,
+                                AppDatabase::class.java,
+                                DATABASE_NAME
+                            ).fallbackToDestructiveMigration(true)
+                    .build()
                 INSTANCE = instance
                 instance
             }
