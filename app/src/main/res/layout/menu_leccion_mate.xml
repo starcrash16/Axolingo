@@ -42,25 +42,16 @@
             app:shadowButtonColor="#0960fb"
             android:textColor="@android:color/white"/>
 
-<!--        <com.proyecto_final.axolingo.art.botons.BotonLeccion-->
-<!--            android:id="@+id/btnVocabulary"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:text="VOCABULARY"-->
-<!--            app:mainButtonColor="#E91E63"-->
-<!--            app:shadowButtonColor="#C2185B"-->
-<!--            android:textColor="@android:color/white"/>-->
+        <com.proyecto_final.axolingo.art.botons.BotonLeccion
+            android:id="@+id/btnCanasta"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="24dp"
+            android:text="CANASTA"
+            app:mainButtonColor="#FF9800"
+            app:shadowButtonColor="#F57C00"
+            android:textColor="@android:color/white"/>
 
-<!--        <com.proyecto_final.axolingo.art.botons.BotonLeccion-->
-<!--            android:id="@+id/btnTranslator"-->
-<!--            android:layout_width="200dp"-->
-<!--            android:layout_height="80dp"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:text="TRANSLATOR"-->
-<!--            app:mainButtonColor="#3BAA16"-->
-<!--            app:shadowButtonColor="#256B0D"-->
-<!--            android:textColor="@android:color/white"/>-->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

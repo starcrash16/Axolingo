@@ -96,7 +96,7 @@ class VocabActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(8, 12, 8, 12) // Mayor separación vertical
+        params.setMargins(8, 32, 8, 32) // Aumentar separación vertical
         tv.layoutParams = params
         tv.setOnTouchListener { v, event -> handleWordTouch(tv, event) }
         return tv
@@ -114,7 +114,7 @@ class VocabActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        params.setMargins(8, 12, 8, 12) // Mayor separación vertical
+        params.setMargins(8, 32, 8, 32) // Aumentar separación vertical
         tv.layoutParams = params
         return tv
     }
@@ -125,7 +125,7 @@ class VocabActivity : AppCompatActivity() {
             MotionEvent.ACTION_DOWN -> {
                 val color = getUniqueColor()
                 wordBox.setBackgroundColor(color)
-                val start = getRightCenter(wordBox) // Punto medio del borde derecho
+                val start = getCenter(wordBox) // Punto central de la caja
                 currentConnection = Connection(wordBox, null, color, start, start)
                 drawingView.setDynamicLine(start, start, color)
             }
@@ -139,7 +139,7 @@ class VocabActivity : AppCompatActivity() {
                 if (defBox != null && connections.none { it.defBtn == defBox }) {
                     // Conexión exitosa
                     defBox.setBackgroundColor(currentConnection!!.color)
-                    val end = getLeftCenter(defBox) // Punto medio del borde izquierdo
+                    val end = getCenter(defBox) // Punto central de la caja de definición
                     drawingView.addPermanentLine(currentConnection!!.start, end, currentConnection!!.color)
                     connections.add(currentConnection!!.copy(defBtn = defBox, end = end))
                 } else {
@@ -166,7 +166,7 @@ class VocabActivity : AppCompatActivity() {
         view.getLocationOnScreen(loc)
         val x = loc[0] + view.width / 2f
         val y = loc[1] + view.height / 2f
-        return PointF(x, y)
+        return PointF(x, y-60)
     }
 
     private fun getRightCenter(view: View): PointF {
@@ -174,7 +174,7 @@ class VocabActivity : AppCompatActivity() {
         view.getLocationOnScreen(loc)
         val x = loc[0] + view.width.toFloat() // Borde derecho
         val y = loc[1] + view.height / 2f // Centro vertical
-        return PointF(x, y)
+        return PointF(x, y-60)
     }
 
     private fun getLeftCenter(view: View): PointF {
@@ -182,7 +182,7 @@ class VocabActivity : AppCompatActivity() {
         view.getLocationOnScreen(loc)
         val x = loc[0].toFloat() // Borde izquierdo
         val y = loc[1] + view.height / 2f // Centro vertical
-        return PointF(x, y)
+        return PointF(x, y-60)
     }
 
     private fun findDefBoxAt(x: Float, y: Float): TextView? {
@@ -201,23 +201,36 @@ class VocabActivity : AppCompatActivity() {
 
     private fun validateConnections() {
         val correct = connections.count { conn ->
-            conn.defBtn != null && correctPairs[conn.wordBtn.text.toString()] == conn.defBtn?.text.toString()
+            conn.defBtn?.text == correctPairs[conn.wordBtn.text]
         }
-        Toast.makeText(this, "¡Felicidades! Tuviste $correct conexiones correctas de 6.", Toast.LENGTH_LONG).show()
-        
-        // Limpiar las líneas y permitir volver a conectar
+
+        // Limpiar la pantalla y mostrar el mensaje de felicitación
+        leftContainer.visibility = View.GONE
+        rightContainer.visibility = View.GONE
+        btnValidate.visibility = View.GONE
+        btnReset.visibility = View.GONE
         drawingView.clearAllLines()
-        connections.clear()
-        usedColors.clear()
-        
-        // Restaurar fondos a blanco para poder reconectar
-        for (i in 0 until leftContainer.childCount) {
-            val tv = leftContainer.getChildAt(i) as TextView
-            tv.setBackgroundResource(R.drawable.vocab_item_bg)
+
+        val congratulationsContainer = findViewById<LinearLayout>(R.id.congratulations_container)
+        val tvScore = findViewById<TextView>(R.id.tv_score)
+        congratulationsContainer.visibility = View.VISIBLE
+        tvScore.text = "¡Felicidades! Tuviste $correct aciertos de 6."
+
+        // Configurar botones
+        val btnMainMenu = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal>(R.id.btn_main_menu)
+        val btnRestartGame = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul>(R.id.btn_restart_game)
+
+        btnMainMenu.setOnClickListener {
+            finish() // Regresar al menú principal
         }
-        for (i in 0 until rightContainer.childCount) {
-            val tv = rightContainer.getChildAt(i) as TextView
-            tv.setBackgroundResource(R.drawable.vocab_item_bg)
+
+        btnRestartGame.setOnClickListener {
+            congratulationsContainer.visibility = View.GONE
+            leftContainer.visibility = View.VISIBLE
+            rightContainer.visibility = View.VISIBLE
+            btnValidate.visibility = View.VISIBLE
+            btnReset.visibility = View.VISIBLE
+            resetGame()
         }
     }
 

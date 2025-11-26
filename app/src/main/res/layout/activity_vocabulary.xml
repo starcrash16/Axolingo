@@ -4,7 +4,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFCDD2"
+    android:background="@drawable/grad_salmon_to_white"
 
     tools:context=".leccion_ingles.VocabularyActivity">
 
@@ -72,24 +72,24 @@
     </LinearLayout>
 
     <!-- Botón Reiniciar -->
-    <Button
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
         android:id="@+id/btnReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reiniciar"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@id/btnValidate"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Botón Validar -->
-    <Button
+    <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
         android:id="@+id/btnValidate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Validar"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -108,5 +108,56 @@
         app:layout_constraintBottom_toTopOf="@id/btnReset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Congratulatory Message -->
+    <LinearLayout
+        android:id="@+id/congratulations_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tv_congratulations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡Felicidades!"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#4CAF50"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tuviste X aciertos."
+            android:textSize="18sp"
+            android:textColor="#37474F"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
+            android:id="@+id/btn_main_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menú Principal"
+            android:layout_marginBottom="16dp" />
+
+        <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
+            android:id="@+id/btn_restart_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reiniciar Juego" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
