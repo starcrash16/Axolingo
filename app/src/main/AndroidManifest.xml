@@ -84,6 +84,22 @@
             android:name=".leccion_ingles.VocabularyActivity"
             android:exported="false"/>
 
+
+        <activity
+            android:name=".leccion_ingles.vocabActividad.VocabActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".leccion_ingles.vocabActividad.MenuVocabularyActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".configuraciones.ConfiguracionesUsuarioActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".leccion_mate.actividad_canasta.ActividadCanasta"
+            android:exported="false" />
+
         <!-- solicitando el modelo para digitos -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
@@ -92,5 +108,5 @@
     </application>
 
 </manifest>
-            
+
 

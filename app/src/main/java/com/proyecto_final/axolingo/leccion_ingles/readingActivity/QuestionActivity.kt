@@ -8,11 +8,11 @@ import android.widget.TextView
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson // Necesario para deserializar la historia pasada
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
 
-class QuestionActivity : AppCompatActivity() {
+class QuestionActivity : BaseActivity() {
 
     // UI elements
     private lateinit var tvQuestion: TextView
@@ -31,6 +31,9 @@ class QuestionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.question_layout)
+
+        // Apply shaded background
+        window.setBackgroundDrawableResource(R.drawable.axo_biblioteca_shaded)
 
         // 1. Initialize UI components
         tvQuestion = findViewById(R.id.tv_question)

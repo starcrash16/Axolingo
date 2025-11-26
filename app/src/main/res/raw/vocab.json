@@ -1,0 +1,44 @@
+{
+  "words": [
+    {
+      "word": "Hello",
+      "definition": "A greeting, used when meeting someone."
+    },
+    {
+      "word": "Dog",
+      "definition": "A common pet animal that barks."
+    },
+    {
+      "word": "Cat",
+      "definition": "A small animal often kept as a pet that meows."
+    },
+    {
+      "word": "Ball",
+      "definition": "A round object used for playing games."
+    },
+    {
+      "word": "Happy",
+      "definition": "Feeling or showing pleasure or contentment."
+    },
+    {
+      "word": "Run",
+      "definition": "Move fast on foot."
+    },
+    {
+      "word": "Jump",
+      "definition": "Push oneself off the ground into the air."
+    },
+    {
+      "word": "Book",
+      "definition": "A set of pages fastened together and protected by a cover."
+    },
+    {
+      "word": "Eat",
+      "definition": "Put food into the mouth and chew and swallow it."
+    },
+    {
+      "word": "Sleep",
+      "definition": "Rest with your eyes closed and mind inactive."
+    }
+  ]
+}

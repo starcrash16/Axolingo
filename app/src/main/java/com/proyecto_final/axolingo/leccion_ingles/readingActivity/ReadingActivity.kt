@@ -7,10 +7,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
+import com.proyecto_final.axolingo.art.lectura_Art.StageProgressBar
 import java.util.Random
 import android.content.Intent
 
@@ -22,13 +23,14 @@ private const val STAGE_DEV_2 = 2
 private const val STAGE_END = 3
 private const val TOTAL_STAGES = 4
 
-class ReadingActivity : AppCompatActivity() {
+class ReadingActivity : BaseActivity() {
 
     // UI elements (lateinit for setup in onCreate)
     private lateinit var tvTitle: TextView
     private lateinit var ivStoryImage: ImageView
     private lateinit var tvDescription: TextView
     private lateinit var btnNext: Button
+    private lateinit var stageProgressBar: StageProgressBar
 
     // Story state variables
     private lateinit var allStories: List<Story>
@@ -45,6 +47,9 @@ class ReadingActivity : AppCompatActivity() {
         ivStoryImage = findViewById(R.id.iv_story_image)
         tvDescription = findViewById(R.id.tv_story_description)
         btnNext = findViewById(R.id.btn_next_stage)
+        stageProgressBar = findViewById(R.id.story_progress_bar)
+        stageProgressBar.setTotalStages(TOTAL_STAGES)
+        stageProgressBar.setStage(currentStage)
 
         // 2. Load and select story randomly
         loadAndSelectRandomStory()
@@ -71,6 +76,8 @@ class ReadingActivity : AppCompatActivity() {
         currentStory = allStories[randomIndex]
 
         // Start the reading session
+        currentStage = STAGE_BEGINNING
+        stageProgressBar.setStage(currentStage)
         updateUIForCurrentStage()
     }
 
@@ -83,6 +90,8 @@ class ReadingActivity : AppCompatActivity() {
             updateUIForCurrentStage()
         } else {
             // La historia ha terminado. Prepara la transición al cuestionario.
+
+          stageProgressBar.setStage(TOTAL_STAGES)
 
             btnNext.text = "Start Quiz" // Cambia el texto del botón
             tvDescription.text = "You finished the story! Tap the button to start the quiz."
@@ -108,6 +117,7 @@ class ReadingActivity : AppCompatActivity() {
     private fun updateUIForCurrentStage() {
         tvTitle.text = currentStory.title
         btnNext.text = "Continue Reading"
+      stageProgressBar.setStage(currentStage)
 
         // Get text and image key based on the current stage index
         val (stageText, imageKey) = when (currentStage) {

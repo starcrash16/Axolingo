@@ -8,13 +8,13 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.proyecto_final.axolingo.BaseActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.R
 import java.io.InputStream
 
-class InterfazSelector : AppCompatActivity() {
+class InterfazSelector : BaseActivity() {
 
     private var indiceActual = 0
     private lateinit var container: ViewGroup

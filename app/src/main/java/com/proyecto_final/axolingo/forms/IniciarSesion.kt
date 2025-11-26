@@ -8,7 +8,8 @@ import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 
-class IniciarSesion : AppCompatActivity() {
+
+class IniciarSesion : BaseActivity(){
     private lateinit var binding: InicioSesionBinding
     private lateinit var loginViewModel: LoginViewModel
 
