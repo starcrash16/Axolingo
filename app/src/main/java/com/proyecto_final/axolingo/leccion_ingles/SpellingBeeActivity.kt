@@ -2,6 +2,7 @@ package com.proyecto_final.axolingo.leccion_ingles
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.DragEvent
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
@@ -26,13 +28,16 @@ class SpellingBeeActivity : BaseActivity() {
     private lateinit var answerZone: LinearLayout
     private lateinit var wordToSpellText: TextView
     private lateinit var btnValidate: Button
-    private lateinit var progressText: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvGameFinished: TextView
+    private lateinit var btnBackToMenu: Button
 
     // Game state variables
-    private var wordList: List<String> = emptyList()
+    private var results: MutableList<Boolean> = mutableListOf()
+    private val gameWords = listOf("AXO", "CAT", "DOG", "SUN")
     private var currentWordIndex: Int = 0
     private val currentWord: String
-        get() = if (wordList.isNotEmpty() && currentWordIndex < wordList.size) wordList[currentWordIndex] else ""
+        get() = if (gameWords.isNotEmpty() && currentWordIndex < gameWords.size) gameWords[currentWordIndex] else ""
 
     // Constants for letter generation
     private val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -47,65 +52,39 @@ class SpellingBeeActivity : BaseActivity() {
         answerZone = findViewById(R.id.answerZone)
         wordToSpellText = findViewById(R.id.wordToSpellText)
         btnValidate = findViewById(R.id.btnValidate)
-        progressText = findViewById(R.id.progressText)
-
-        // Load words once at startup
-        loadWordsFromAsset()
+        progressBar = findViewById(R.id.progressBar)
+        tvGameFinished = findViewById(R.id.tvGameFinished)
+        btnBackToMenu = findViewById(R.id.btnBackToMenu)
 
         // Apply drag listeners
         answerZone.setOnDragListener(dragListener)
         sourceZone.setOnDragListener(dragListener)
 
         // Set up button listeners
-        btnValidate.setOnClickListener { checkSpelling() }
-        findViewById<Button>(R.id.btnRestart).setOnClickListener {
-            currentWordIndex = 0
-            setupGame()
+        btnValidate.setOnClickListener { onValidateClicked() }
+        findViewById<Button>(R.id.btnRestart).setOnClickListener { resetCurrentWord() }
+        btnBackToMenu.setOnClickListener {
+            val intent = Intent(this, MenuLeccionInglesActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         setupGame()
     }
 
     /**
-     * Loads the word list from the JSON file, ensuring clean reading and explicit type casting.
-     */
-    private fun loadWordsFromAsset() {
-        try {
-            val inputStream = resources.openRawResource(R.raw.words)
-
-            // CORRECCIÓN 1: Leer como texto para evitar problemas de codificación (BOM)
-            val jsonString = inputStream.reader().readText()
-
-            val type = object : TypeToken<List<String>>() {}.type
-
-            // CORRECCIÓN 2: Forzar el tipo con fromJson<T> y cast para resolver errores de inferencia
-            @Suppress("UNCHECKED_CAST")
-            val rawWords = Gson().fromJson<List<String>>(jsonString, type) as List<String>
-
-            // Mapeo final: Limpiar espacios y asegurar mayúsculas
-            wordList = rawWords.map { it.trim().uppercase() }
-
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error de JSON: ${e.message}", Toast.LENGTH_LONG).show()
-            wordList = listOf("AXOLOTL", "KOTLIN", "ANDROID") // Failsafe words
-        }
-    }
-
-    /**
      * Sets up the current level/word, generating the expanded letter bank.
      */
     private fun setupGame() {
-        if (wordList.isEmpty() || currentWordIndex >= wordList.size) {
-            wordToSpellText.text = "¡Juego Terminado!"
-            progressText.text = "Nivel: Finalizado"
-            sourceZone.removeAllViews()
-            answerZone.removeAllViews()
-            btnValidate.isEnabled = false
+        if (currentWordIndex >= gameWords.size) {
+            showGameFinished()
             return
         }
 
         // Update the progress counter
-        progressText.text = "Nivel: ${currentWordIndex + 1} / ${wordList.size}"
+        progressBar.max = gameWords.size
+        progressBar.progress = currentWordIndex
+        wordToSpellText.text = "Deletrea: '${currentWord}'"
 
         // Reset UI state
         sourceZone.removeAllViews()
@@ -144,22 +123,30 @@ class SpellingBeeActivity : BaseActivity() {
      * Note: Dimensions (120x120) and Margins (5px) are used directly as specified.
      */
     private fun createDraggableLetter(letter: String): TextView {
-        // Definimos el margen fijo en píxeles (5px)
         val marginInPixels = 5
-        val marginDp = 1 // Distancia deseada en DP
-        val marginPx = marginDp.dpToPx() // Conversión a Píxeles
+        val marginDp = 1
+        val marginPx = marginDp.dpToPx()
 
+        val warmColors = listOf(
+            Color.parseColor("#FFB74D"), // Orange
+            Color.parseColor("#FFD54F"), // Yellow
+            Color.parseColor("#FF8A65"), // Light Red
+            Color.parseColor("#4FC3F7"), // Light Blue
+            Color.parseColor("#81C784"), // Light Green
+            Color.parseColor("#BA68C8"), // Purple
+            Color.parseColor("#F06292"), // Pink
+            Color.parseColor("#FFF176"), // Lemon
+            Color.parseColor("#A1887F"), // Brown
+            Color.parseColor("#E57373")  // Red
+        )
+        val randomColor = warmColors.random()
         val textView = TextView(this).apply {
             text = letter
             textSize = 32f
             gravity = Gravity.CENTER
-            setTextColor(Color.WHITE)
+            setTextColor(randomColor)
             setBackgroundResource(R.drawable.letter_bg)
-
-            // Aplicamos el margen fijo de 5 píxeles, manteniendo las dimensiones fijas (120x120)
-            // Usamos LinearLayout.LayoutParams para el manejo de márgenes en un LinearLayout/Flexbox
             layoutParams = LinearLayout.LayoutParams(150, 150).also {
-                // Establece un margen de 5 píxeles a todos los lados
                 it.setMargins(marginInPixels, marginInPixels, marginInPixels, marginInPixels)
             }
         }
@@ -181,7 +168,7 @@ class SpellingBeeActivity : BaseActivity() {
     /**
      * Checks if the letters in the answerZone match the target word.
      */
-    private fun checkSpelling() {
+    private fun onValidateClicked() {
         val spelledWord = StringBuilder()
         // Concatenate text from all children in the answerZone
         for (i in 0 until answerZone.childCount) {
@@ -194,20 +181,39 @@ class SpellingBeeActivity : BaseActivity() {
         val result = spelledWord.toString()
 
         // Comparison against the current target word
-        if (result == currentWord) {
-            Toast.makeText(this, "¡Correcto! Palabra: $currentWord", Toast.LENGTH_SHORT).show()
-            goToNextWord()
-        } else {
-            Toast.makeText(this, "Incorrecto. Palabra formada: $result", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    /**
-     * Advances to the next word/level.
-     */
-    private fun goToNextWord() {
+        results.add(result == currentWord)
         currentWordIndex++
         setupGame()
+    }
+
+    private fun resetCurrentWord() {
+        // Move all letters from answerZone back to sourceZone
+        val lettersToReturn = mutableListOf<View>()
+        for (i in 0 until answerZone.childCount) {
+            lettersToReturn.add(answerZone.getChildAt(i))
+        }
+        for (view in lettersToReturn) {
+            answerZone.removeView(view)
+            sourceZone.addView(view)
+        }
+        answerZone.setBackgroundResource(R.drawable.answer_zone_bg)
+        sourceZone.setBackgroundColor(Color.TRANSPARENT)
+    }
+
+    private fun showGameFinished() {
+        // Hide all game views
+        progressBar.visibility = View.GONE
+        wordToSpellText.visibility = View.GONE
+        answerZone.visibility = View.GONE
+        sourceZone.visibility = View.GONE
+        findViewById<Button>(R.id.btnValidate).visibility = View.GONE
+        findViewById<Button>(R.id.btnRestart).visibility = View.GONE
+        findViewById<View>(R.id.dottedLine).visibility = View.GONE
+        // Show final message and back button
+        val score = results.count { it }
+        tvGameFinished.text = "¡Felicidades, Juego Terminado!\nAciertos: $score/${gameWords.size}"
+        tvGameFinished.visibility = View.VISIBLE
+        btnBackToMenu.visibility = View.VISIBLE
     }
 
     // Listener for drag events on both zones

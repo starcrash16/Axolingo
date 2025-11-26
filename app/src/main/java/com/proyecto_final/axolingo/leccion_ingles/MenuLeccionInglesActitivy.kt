@@ -30,7 +30,7 @@ class MenuLeccionInglesActivity : BaseActivity() {
         val btnVocab: Button = findViewById(R.id.btnVocabulary)
 
         btnVocab.setOnClickListener {
-            val intent = Intent(this, VocabularyActivity::class.java)
+            val intent = Intent(this, com.proyecto_final.axolingo.leccion_ingles.vocabActividad.VocabActivity::class.java)
             startActivity(intent)
         }
 

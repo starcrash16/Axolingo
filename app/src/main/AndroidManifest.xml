@@ -80,6 +80,14 @@
             android:name=".leccion_ingles.VocabularyActivity"
             android:exported="false"/>
 
+
+        <activity
+            android:name=".leccion_ingles.vocabActividad.VocabActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".leccion_ingles.vocabActividad.MenuVocabularyActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".configuraciones.ConfiguracionesUsuarioActivity"
             android:exported="false"/>

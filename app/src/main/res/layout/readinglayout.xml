@@ -22,6 +22,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Juanito's Big Kick" />
 
+    <com.proyecto_final.axolingo.art.lectura_Art.StageProgressBar
+        android:id="@+id/story_progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:progressDrawable="@drawable/progressbar"
+        app:currentStage="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_story_title"
+        app:totalStages="4" />
+
     <ImageView
         android:id="@+id/iv_story_image"
         android:layout_width="0dp"
@@ -29,7 +41,7 @@
         android:layout_margin="16dp"
         android:scaleType="fitCenter"
         android:background="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@id/tv_story_title"
+        app:layout_constraintTop_toBottomOf="@id/story_progress_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintDimensionRatio="1:1"

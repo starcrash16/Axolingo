@@ -9,4 +9,9 @@
         <attr name="mainButtonColor" format="color" />
         <attr name="shadowButtonColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="StageProgressBar">
+        <attr name="totalStages" format="integer" />
+        <attr name="currentStage" format="integer" />
+    </declare-styleable>
 </resources>
