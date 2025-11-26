@@ -95,6 +95,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_form"
             android:textColor="@color/black"
+            android:inputType="textPassword"
             android:padding="10dp"
             app:layout_constraintBottom_toTopOf="@+id/forgot_password"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,13 +124,13 @@
             android:textSize="17sp"
             android:textStyle="bold"
             android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+            app:layout_constraintBottom_toTopOf="@+id/btnLogin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forgot_password" />
 
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

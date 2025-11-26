@@ -61,6 +61,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".forms.CambiarContra"
+            android:exported="false" />
+
+        <activity
             android:name=".selector_palabras.InterfazSelector"
             android:exported="false" />
 
