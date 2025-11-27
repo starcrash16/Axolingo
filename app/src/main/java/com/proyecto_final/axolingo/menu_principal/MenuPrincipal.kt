@@ -108,7 +108,7 @@ class MenuPrincipal @JvmOverloads constructor(
             val sessionManager = SessionManager(context)
             val username = sessionManager.loginFlow.first()
             if (username != null) {
-                tvWelcome.text = "Bienvenido $username"!
+                tvWelcome.text = "Bienvenido $username!"
             }
         }
 
@@ -127,8 +127,8 @@ class MenuPrincipal @JvmOverloads constructor(
                     loginViewModel.logoutUsuario(
                         onSuccess = {
                             val intent = Intent(context, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             context.startActivity(intent)
-                            (context as? MenuPrincipalActivity)?.finish()
                         } ,
                         onConflict = {
                             showConflictDialog()

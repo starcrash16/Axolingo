@@ -63,7 +63,8 @@ class MainActivity : BaseActivity() {
         }
 
         infoAppButton.setOnClickListener {
-            //pantalla de informacion
+            val intent = Intent(this, InfoAppActivity::class.java)
+            startActivity(intent)
         }
 
         loginButton.setOnClickListener {
