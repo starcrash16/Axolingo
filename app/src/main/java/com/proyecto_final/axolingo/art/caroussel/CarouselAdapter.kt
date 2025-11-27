@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.proyecto_final.axolingo.R
 
+import com.proyecto_final.axolingo.art.botons.BotonLeccion
+
 // 1. El constructor ahora acepta una 'lambda' (una función/instrucción) que se llamará al hacer clic.
 class CarouselAdapter(
     private val items: List<CarouselItem>,
@@ -19,7 +21,7 @@ class CarouselAdapter(
         private val titleTextView: TextView = itemView.findViewById(R.id.carouselItemTitle)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.carouselItemDescription)
         private val imageView: ImageView = itemView.findViewById(R.id.carouselItemImage)
-        private val navigateButton: Button = itemView.findViewById(R.id.btnNavigate)
+        private val navigateButton: BotonLeccion = itemView.findViewById(R.id.btnNavigate)
 
         fun bind(item: CarouselItem, position: Int) {
             titleTextView.text = item.title

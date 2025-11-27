@@ -123,7 +123,7 @@ class MenuPrincipal @JvmOverloads constructor(
 
         // Define los datos que se mostrarán en cada item del carrusel.
         val carouselItems = listOf(
-            CarouselItem("Learn Inglés!!!", "Explora nuevas palabras y expande tu conocimiento de esta lengua.", R.drawable.axo_rojo_saltando),
+            CarouselItem("Learn Inglés", "Explora nuevas palabras y expande tu conocimiento de esta lengua.", R.drawable.axo_rojo_saltando),
             CarouselItem("Matemáticas con Axo", "Refuerza tu aprendizaje con divertidos minijuegos.", R.drawable.axo_azuk_saltando),
             CarouselItem("Chatea con Axo", "Practica tus habilidades de conversación con nuestro bot.", R.drawable.axo_blanco)
         )
@@ -136,7 +136,7 @@ class MenuPrincipal @JvmOverloads constructor(
             // Usamos un 'when' (como un switch) para revisar el título del item
             // y decidir qué Activity iniciar.
             val intent = when (clickedItem.title) {
-                "Learn Inglés!!!" -> Intent(context, MenuLeccionInglesActivity::class.java)
+                "Learn Inglés" -> Intent(context, MenuLeccionInglesActivity::class.java)
                 "Matemáticas con Axo" -> Intent(context, MenuLeccionMateActivity::class.java)
                 "Chatea con Axo" -> null // Reemplaza con: Intent(context, MenuChatActivity::class.java)
                 else -> null
