@@ -10,9 +10,15 @@ import android.widget.RadioButton
 import android.widget.Toast
 import android.view.View
 import android.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson // Necesario para deserializar la historia pasada
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class QuestionActivity : BaseActivity() {
 
@@ -118,6 +124,16 @@ class QuestionActivity : BaseActivity() {
     }
 
     private fun showFinalScore() {
+        val finalScore = score.toFloat() / 3.0f
+        val sessionManager = SessionManager(applicationContext)
+        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val username = sessionManager.loginFlow.first()
+            if (username != null) {
+                userDao.updateSCReading(username, finalScore)
+            }
+        }
         tvQuestion.text = "Quiz Finished! Your score is: $score / ${currentStory.questions.size}"
         radioGroupOptions.visibility = RadioGroup.GONE // Hide options
         btnSubmitAnswer.text = "Back to Menu"
@@ -126,6 +142,8 @@ class QuestionActivity : BaseActivity() {
             finish() // Or navigate to a results screen/main menu
         }
         Toast.makeText(this, "Quiz completed!", Toast.LENGTH_LONG).show()
+
+        
     }
 
     private fun showFeedbackDialog() {

@@ -11,8 +11,14 @@ import android.widget.TextView
 import android.widget.Toast
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.proyecto_final.axolingo.R
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.InputStreamReader
 import kotlin.random.Random
 
@@ -216,6 +222,18 @@ class VocabActivity : AppCompatActivity() {
         val tvScore = findViewById<TextView>(R.id.tv_score)
         congratulationsContainer.visibility = View.VISIBLE
         tvScore.text = "¡Felicidades! Tuviste $correct aciertos de 6."
+
+        // Save score to database
+        val finalScore = correct.toFloat() / 6.0f
+        val sessionManager = SessionManager(applicationContext)
+        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val username = sessionManager.loginFlow.first()
+            if (username != null) {
+                userDao.updateSCVocab(username, finalScore)
+            }
+        }
 
         // Configurar botones
         val btnMainMenu = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal>(R.id.btn_main_menu)

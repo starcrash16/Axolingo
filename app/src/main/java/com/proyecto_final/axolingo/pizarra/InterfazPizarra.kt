@@ -7,8 +7,15 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.proyecto_final.axolingo.R
+import androidx.lifecycle.lifecycleScope
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class InterfazPizarra : AppCompatActivity() {
@@ -26,6 +33,10 @@ class InterfazPizarra : AppCompatActivity() {
     val operador: Array<String> = arrayOf("+", "-")
     val numero_ejercicios = 3
 
+    // Lists to store the generated questions and answers for feedback
+    private val generatedOperations = mutableListOf<String>()
+    private val generatedResults = mutableListOf<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.menu_selector)
@@ -39,12 +50,27 @@ class InterfazPizarra : AppCompatActivity() {
         if (indiceActual >= numero_ejercicios) {
             Toast.makeText(this, "¡Completaste todas las frases!", Toast.LENGTH_LONG).show()
             container.removeAllViews()
+            
+            val finalScore = respCorrectas.toFloat() / 3.0f
+            val sessionManager = SessionManager(applicationContext)
+            val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val username = sessionManager.loginFlow.first()
+                if (username != null) {
+                    userDao.updateSCBoard(username, finalScore)
+                }
+            }
+
             val texto = "Aciertos: $respCorrectas de $indiceActual"
             val inflater = layoutInflater
             val puntuacion: View = inflater.inflate(R.layout.puntuacion_final, null)
             puntuacion.findViewById<TextView>(R.id.text).text = texto
             puntuacion.findViewById<Button>(R.id.exitButton ).setOnClickListener {
                 finish()
+            }
+            puntuacion.findViewById<Button>(R.id.btnFeedback).setOnClickListener {
+                showFeedbackDialog()
             }
             container.addView(puntuacion)
             return
@@ -55,11 +81,21 @@ class InterfazPizarra : AppCompatActivity() {
         val control = PizarraMagica(this)
         control.background = getDrawable(R.drawable.edittext_form)
         val num_op = Random.nextInt(2)
-        control.instrucciones = instruccion + ejercicios[indiceActual][0] + operador[num_op] + ejercicios[indiceActual][1]
+        
+        val operationString = "${ejercicios[indiceActual][0]} ${operador[num_op]} ${ejercicios[indiceActual][1]}"
+        control.instrucciones = instruccion + operationString
+        
+        var resultString = ""
         when (num_op) {
-            0 -> control.respuesta = (ejercicios[indiceActual][0] + ejercicios[indiceActual][1]).toString()
-            1 -> control.respuesta = (ejercicios[indiceActual][0] - ejercicios[indiceActual][1]).toString()
+            0 -> resultString = (ejercicios[indiceActual][0] + ejercicios[indiceActual][1]).toString()
+            1 -> resultString = (ejercicios[indiceActual][0] - ejercicios[indiceActual][1]).toString()
         }
+        control.respuesta = resultString
+
+        // Store for feedback
+        generatedOperations.add(operationString)
+        generatedResults.add(resultString)
+
         val respuestas: List<List<Int>> = List(3) { i ->
             var r1 = 0
             when (num_op) {
@@ -84,5 +120,20 @@ class InterfazPizarra : AppCompatActivity() {
             cargarSiguientePregunta()
         }
         container.addView(control)
+    }
+
+    private fun showFeedbackDialog() {
+        val builder = StringBuilder()
+        for (i in generatedOperations.indices) {
+            builder.append("${i + 1}. ${generatedOperations[i]}\nR = ${generatedResults[i]}\n\n")
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Respuestas Correctas")
+            .setMessage(builder.toString())
+            .setPositiveButton("Cerrar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

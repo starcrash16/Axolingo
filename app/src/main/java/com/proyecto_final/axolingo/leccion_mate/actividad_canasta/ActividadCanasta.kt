@@ -13,8 +13,14 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.leccion_mate.MenuLeccionMateActivity
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class ActividadCanasta : AppCompatActivity() {
     // Vistas del Juego
@@ -154,6 +160,7 @@ class ActividadCanasta : AppCompatActivity() {
         tvCongratsTitle.setTextColor(Color.parseColor("#4CAF50")) // Verde
         tvFinalScore.text = "Puntuación Final: $score"
         imgResultIcon.setImageResource(R.drawable.huevo_bien) // Icono de éxito
+        saveScore()
     }
 
     private fun showGameOverScreen() {
@@ -167,6 +174,20 @@ class ActividadCanasta : AppCompatActivity() {
         tvCongratsTitle.setTextColor(Color.RED)
         tvFinalScore.text = "Te quedaste sin vidas\nPuntuación: $score"
         imgResultIcon.setImageResource(R.drawable.huevo) // Icono de error (huevo malo)
+        saveScore()
+    }
+
+    private fun saveScore() {
+        val finalScore = score.toFloat() 
+        val sessionManager = SessionManager(applicationContext)
+        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val username = sessionManager.loginFlow.first()
+            if (username != null) {
+                userDao.updateSCShapes(username, finalScore)
+            }
+        }
     }
 
     // --- LÓGICA DEL JUEGO ---

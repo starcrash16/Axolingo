@@ -9,10 +9,16 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import android.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.BaseActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.R
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.InputStream
 
 class InterfazSelector : BaseActivity() {
@@ -50,6 +56,18 @@ class InterfazSelector : BaseActivity() {
         if (indiceActual >= numero_ejercicios) {
             Toast.makeText(this, "¡Completaste todas las frases!", Toast.LENGTH_LONG).show()
             container.removeAllViews()
+            
+            val finalScore = respCorrectas.toFloat() / 3.0f
+            val sessionManager = SessionManager(applicationContext)
+            val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val username = sessionManager.loginFlow.first()
+                if (username != null) {
+                    userDao.updateSCTransl(username, finalScore)
+                }
+            }
+
             val texto = "Aciertos: $respCorrectas de $indiceActual"
             val inflater = layoutInflater
             val puntuacion: View = inflater.inflate(R.layout.puntuacion_final, null)

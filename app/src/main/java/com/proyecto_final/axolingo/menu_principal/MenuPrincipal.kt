@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,7 @@ import com.proyecto_final.axolingo.session.SessionManager
 import com.proyecto_final.axolingo.MusicManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.math.log
 
@@ -99,7 +101,17 @@ class MenuPrincipal @JvmOverloads constructor(
         }
         // -------------------------------------------
 
+        val tvWelcome: TextView = findViewById(R.id.tvWelcome)
         val scope = (context as? LifecycleOwner)?.lifecycleScope
+        
+        scope?.launch(Dispatchers.Main) {
+            val sessionManager = SessionManager(context)
+            val username = sessionManager.loginFlow.first()
+            if (username != null) {
+                tvWelcome.text = "Bienvenido $username"!
+            }
+        }
+
         scope?.launch(Dispatchers.IO) {
             val userDao = AppDatabase.getDatabase(context, this).userDao()
             val sessionManager = SessionManager(context)
