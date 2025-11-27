@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import android.app.AlertDialog
 import com.proyecto_final.axolingo.BaseActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -56,6 +57,9 @@ class InterfazSelector : BaseActivity() {
             puntuacion.findViewById<Button>(R.id.exitButton ).setOnClickListener {
                 finish()
             }
+            puntuacion.findViewById<Button>(R.id.btnFeedback).setOnClickListener {
+                showFeedbackDialog()
+            }
             container.addView(puntuacion)
             return
         }
@@ -80,5 +84,22 @@ class InterfazSelector : BaseActivity() {
             cargarSiguientePregunta()
         }
         container.addView(control)
+    }
+
+    private fun showFeedbackDialog() {
+        val builder = StringBuilder()
+        var index = 1
+        for (ejercicio in ejercicios) {
+            builder.append("$index. ${ejercicio.sentence}\nR = ${ejercicio.answer}\n\n")
+            index++
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Respuestas Correctas")
+            .setMessage(builder.toString())
+            .setPositiveButton("Cerrar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

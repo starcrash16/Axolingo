@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.proyecto_final.axolingo.R
@@ -219,6 +220,7 @@ class VocabActivity : AppCompatActivity() {
         // Configurar botones
         val btnMainMenu = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal>(R.id.btn_main_menu)
         val btnRestartGame = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul>(R.id.btn_restart_game)
+        val btnFeedback = findViewById<com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal>(R.id.btn_feedback)
 
         btnMainMenu.setOnClickListener {
             finish() // Regresar al menú principal
@@ -232,6 +234,27 @@ class VocabActivity : AppCompatActivity() {
             btnReset.visibility = View.VISIBLE
             resetGame()
         }
+
+        btnFeedback.setOnClickListener {
+            showFeedbackDialog()
+        }
+    }
+
+    private fun showFeedbackDialog() {
+        val builder = StringBuilder()
+        var index = 1
+        for ((word, definition) in correctPairs) {
+            builder.append("$index. $word\nR = $definition\n\n")
+            index++
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Respuestas Correctas")
+            .setMessage(builder.toString())
+            .setPositiveButton("Cerrar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun resetGame() {

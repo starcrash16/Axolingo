@@ -156,7 +156,14 @@
             android:id="@+id/btn_restart_game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reiniciar Juego" />
+            android:text="Reiniciar Juego"
+            android:layout_marginBottom="16dp" />
+
+        <com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
+            android:id="@+id/btn_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retroalimentación" />
 
     </LinearLayout>
 

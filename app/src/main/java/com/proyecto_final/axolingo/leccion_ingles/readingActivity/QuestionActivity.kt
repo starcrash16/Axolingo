@@ -8,6 +8,8 @@ import android.widget.TextView
 import android.widget.RadioGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import android.view.View
+import android.app.AlertDialog
 import com.google.gson.Gson // Necesario para deserializar la historia pasada
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
@@ -22,6 +24,7 @@ class QuestionActivity : BaseActivity() {
     private lateinit var btnOption3: RadioButton
     private lateinit var btnOption4: RadioButton
     private lateinit var btnSubmitAnswer: Button // Botón para enviar la respuesta
+    private lateinit var btnFeedback: Button // Botón de retroalimentación
 
     // Story data (will be passed from ReadingActivity)
     private lateinit var currentStory: Story
@@ -43,6 +46,7 @@ class QuestionActivity : BaseActivity() {
         btnOption3 = findViewById(R.id.rb_option3)
         btnOption4 = findViewById(R.id.rb_option4)
         btnSubmitAnswer = findViewById(R.id.btn_submit_answer)
+        btnFeedback = findViewById(R.id.btn_feedback)
 
         // 2. Get the story data passed from ReadingActivity
         val storyJson = intent.getStringExtra("story_data")
@@ -57,6 +61,10 @@ class QuestionActivity : BaseActivity() {
         // 3. Set up submit button click listener
         btnSubmitAnswer.setOnClickListener {
             checkAnswer()
+        }
+
+        btnFeedback.setOnClickListener {
+            showFeedbackDialog()
         }
     }
 
@@ -113,9 +121,26 @@ class QuestionActivity : BaseActivity() {
         tvQuestion.text = "Quiz Finished! Your score is: $score / ${currentStory.questions.size}"
         radioGroupOptions.visibility = RadioGroup.GONE // Hide options
         btnSubmitAnswer.text = "Back to Menu"
+        btnFeedback.visibility = View.VISIBLE // Show feedback button
         btnSubmitAnswer.setOnClickListener {
             finish() // Or navigate to a results screen/main menu
         }
         Toast.makeText(this, "Quiz completed!", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showFeedbackDialog() {
+        val builder = StringBuilder()
+        for ((index, question) in currentStory.questions.withIndex()) {
+            builder.append("${index + 1}. ${question.question}\n")
+            builder.append("R = ${question.answer_c}\n\n")
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Respuestas Correctas")
+            .setMessage(builder.toString())
+            .setPositiveButton("Cerrar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
