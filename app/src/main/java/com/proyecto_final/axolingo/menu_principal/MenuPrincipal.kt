@@ -30,6 +30,7 @@ import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.forms.LoginViewModel
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 import com.proyecto_final.axolingo.session.SessionManager
+import com.proyecto_final.axolingo.MusicManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
@@ -61,6 +62,17 @@ class MenuPrincipal @JvmOverloads constructor(
 
         // 2. Configurar Carrusel
         setupCarousel()
+
+        // --- MÚSICA DE FONDO ---
+        val btnHelp: ImageButton = findViewById(R.id.btnHelp)
+        // Iniciar música si está habilitada
+        MusicManager.startMusic(context)
+        updateMusicIcon(btnHelp)
+
+        btnHelp.setOnClickListener {
+            MusicManager.toggleMusic(context)
+            updateMusicIcon(btnHelp)
+        }
 
         // --- NUEVA FUNCIONALIDAD: BOTÓN SETTINGS ---
         // Encontramos el botón por su ID
@@ -179,6 +191,14 @@ class MenuPrincipal @JvmOverloads constructor(
     private fun stopAutoScroll() {
         // Elimina cualquier desplazamiento programado para prevenir fugas de memoria.
         autoScrollRunnable?.let { autoScrollHandler.removeCallbacks(it) }
+    }
+
+    private fun updateMusicIcon(btn: ImageButton) {
+        if (MusicManager.isPlaying()) {
+            btn.setImageResource(android.R.drawable.ic_media_pause)
+        } else {
+            btn.setImageResource(android.R.drawable.ic_media_play)
+        }
     }
 
     // Se llama cuando la vista se adjunta a la ventana (se hace visible).
