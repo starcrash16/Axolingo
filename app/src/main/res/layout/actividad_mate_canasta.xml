@@ -133,7 +133,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1. Atrapa los números y signos para formar una operación.\n2. Atrapa el HUEVO BUENO para puntos extra.\n3. ¡Evita los huevos malos!\n4. Al final, resuelve la operación."
+                    android:text="1. Atrapa los números y signos para formar una operación. \nIntercala numero y signo! \n2. Atrapa el HUEVO para puntos extra.\n3. ¡Evita las pirañas!\n4. Al final, resuelve la operación."
                     android:textSize="16sp"
                     android:textColor="#555555"
                     android:lineSpacingExtra="4dp"

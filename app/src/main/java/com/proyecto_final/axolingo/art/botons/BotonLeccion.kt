@@ -78,13 +78,7 @@ class BotonLeccion : AppCompatButton {
         background = layerDrawable
 
         // --- 4. Configurar el texto (misma lógica de antes) ---
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(
-            this,
-            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        )
-        TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
-            this, 10, 24, 1, TypedValue.COMPLEX_UNIT_SP
-        )
+
 
         // Aplicar la fuente (puedes cambiar esto o quitarlo si no la tienes)
         try {

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity

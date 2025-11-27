@@ -37,7 +37,8 @@
             android:id="@+id/btnSpellingBee"
             android:layout_width="200dp"
             android:layout_height="80dp"
-            android:text="PALABRAS!!\nSPELLING BEE"
+            android:text="SPELLING BEE"
+            android:textSize="20sp"
             app:mainButtonColor="#ffde59"
             app:shadowButtonColor="#fc5a41"
             android:textColor="#fc5a41"/>
@@ -49,6 +50,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="24dp"
             android:text="READING\nCOMPREHENSION"
+            android:textSize="20dp"
             app:mainButtonColor="#0cc0df"
             app:shadowButtonColor="#0960fb"
             android:textColor="@android:color/white"/>
@@ -60,6 +62,7 @@
             android:layout_height="80dp"
             android:layout_marginTop="24dp"
             android:text="VOCABULARY"
+            android:textSize="20dp"
             app:mainButtonColor="#E91E63"
             app:shadowButtonColor="#C2185B"
             android:textColor="@android:color/white"/>
@@ -69,6 +72,7 @@
             android:layout_width="200dp"
             android:layout_height="80dp"
             android:layout_marginTop="24dp"
+            android:textSize="20sp"
             android:text="TRANSLATOR"
             app:mainButtonColor="#3BAA16"
             app:shadowButtonColor="#256B0D"

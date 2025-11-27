@@ -104,6 +104,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/carouselViewPager"
         android:contentDescription="Siguiente" />
 
+        
+
     <!-- FOOTER NAVBAR -->
     <LinearLayout
         android:id="@+id/bottomNavContainer"
