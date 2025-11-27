@@ -3,11 +3,14 @@ package com.proyecto_final.axolingo.forms
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
+import com.proyecto_final.axolingo.session.SessionManager
 
 
 class IniciarSesion : BaseActivity(){
@@ -17,8 +20,9 @@ class IniciarSesion : BaseActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
-        loginViewModel = LoginViewModel(userDao)
+        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val sessionManager = SessionManager(applicationContext)
+        loginViewModel = LoginViewModel(userDao, sessionManager)
         binding = InicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -79,6 +83,7 @@ class IniciarSesion : BaseActivity(){
                 dialog.dismiss()
                 val intent = Intent(this, MenuPrincipalActivity::class.java)
                 startActivity(intent)
+                finish()
             }
             .show()
     }

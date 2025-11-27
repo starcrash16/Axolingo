@@ -1,5 +1,6 @@
 package com.proyecto_final.axolingo.views
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
@@ -8,8 +9,11 @@ import android.util.AttributeSet
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.proyecto_final.axolingo.MainActivity
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
@@ -22,6 +26,15 @@ import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 import com.proyecto_final.axolingo.leccion_ingles.MenuLeccionInglesActivity
 import com.proyecto_final.axolingo.leccion_mate.MenuLeccionMateActivity
 import com.proyecto_final.axolingo.art.dialogs.JokeDialog
+import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.forms.LoginViewModel
+import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
+import com.proyecto_final.axolingo.session.SessionManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import kotlin.math.log
+
 // import com.proyecto_final.axolingo.menu_chat.MenuChatActivity // <-- Descomenta cuando la tengas
 
 class MenuPrincipal @JvmOverloads constructor(
@@ -31,6 +44,7 @@ class MenuPrincipal @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private lateinit var viewPager: ViewPager2
+    private lateinit var loginViewModel: LoginViewModel
     private val autoScrollHandler = Handler(Looper.getMainLooper())
     private var autoScrollRunnable: Runnable? = null
     private val AUTO_SCROLL_DELAY_MS = 3000L // 3 segundos
@@ -72,6 +86,34 @@ class MenuPrincipal @JvmOverloads constructor(
             JokeDialog(context).show()
         }
         // -------------------------------------------
+
+        val scope = (context as? LifecycleOwner)?.lifecycleScope
+        scope?.launch(Dispatchers.IO) {
+            val userDao = AppDatabase.getDatabase(context, this).userDao()
+            val sessionManager = SessionManager(context)
+            loginViewModel = LoginViewModel(userDao, sessionManager)
+        }
+        val btnLogout: ImageButton = findViewById(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Seguro que quieres cerrar sesión?")
+                .setPositiveButton("Aceptar") { dialog, _ ->
+                    dialog.dismiss()
+                    loginViewModel.logoutUsuario(
+                        onSuccess = {
+                            val intent = Intent(context, MainActivity::class.java)
+                            context.startActivity(intent)
+                            (context as? MenuPrincipalActivity)?.finish()
+                        } ,
+                        onConflict = {
+                            showConflictDialog()
+                        }
+                    )
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
     }
 
     private fun setupCarousel() {
@@ -149,6 +191,16 @@ class MenuPrincipal @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         stopAutoScroll()
+    }
+
+    private fun showConflictDialog() {
+        AlertDialog.Builder(context)
+            .setTitle("Cerrar sesión")
+            .setMessage("Fallo al cerrar la sesión")
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
 

@@ -3,6 +3,7 @@ package com.proyecto_final.axolingo.forms
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.databinding.ContrasenaBinding
 
@@ -13,7 +14,7 @@ class CambiarContra : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
         chPassViewModel = ContraViewModel(userDao)
         binding = ContrasenaBinding.inflate(layoutInflater)
         setContentView(binding.root)

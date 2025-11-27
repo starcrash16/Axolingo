@@ -4,10 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.proyecto_final.axolingo.data.dao.UserDao
 import com.proyecto_final.axolingo.data.entity.User
+import com.proyecto_final.axolingo.session.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val userDao: UserDao) : ViewModel() {
+class LoginViewModel(private val userDao: UserDao, private val sessionManager: SessionManager) : ViewModel() {
     fun loginUsuario(userData: String, userPass: String, onSuccess: (User) -> Unit, onConflict: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -16,11 +17,20 @@ class LoginViewModel(private val userDao: UserDao) : ViewModel() {
                     if (userPass != existingUser.password) {
                         onConflict()
                     } else {
+                        sessionManager.saveLoginState(userData)
                         onSuccess(existingUser)
                     }
                 } else {
                     onConflict()
                 }
+            } catch (e: Exception) { onConflict }
+        }
+    }
+
+    fun logoutUsuario(onSuccess: () -> Unit, onConflict: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                sessionManager.clearSession()
             } catch (e: Exception) { onConflict }
         }
     }
