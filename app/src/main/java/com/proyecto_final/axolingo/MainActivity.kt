@@ -7,9 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
 import com.proyecto_final.axolingo.data.db.AppDatabase
+import com.proyecto_final.axolingo.data.entity.User
 import com.proyecto_final.axolingo.forms.IniciarSesion
 import com.proyecto_final.axolingo.forms.LoginViewModel
 import com.proyecto_final.axolingo.forms.Registrarse
+import com.proyecto_final.axolingo.forms.RegistroViewModel
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 import com.proyecto_final.axolingo.session.SessionManager
 import kotlinx.coroutines.launch
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 // y que contiene un botón con el id 'btnInfoApp'.
 
 class MainActivity : BaseActivity() {
+    private lateinit var registroViewModel: RegistroViewModel
     private lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,30 +37,32 @@ class MainActivity : BaseActivity() {
 
         val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
         val sessionManager = SessionManager(applicationContext)
+        registroViewModel = RegistroViewModel(userDao)
         loginViewModel = LoginViewModel(userDao, sessionManager)
 
         // 3. Configura el listener para que reaccione al clic del usuario.
         localButton.setOnClickListener {
-            loginViewModel.loginUsuario("local", "local",
+            val user = User(
+                uid = 0,
+                user = "local",
+                email = "l@l.com",
+                password = "local",
+                sc_spell = 0.0f,
+                sc_reading = 0.0f,
+                sc_vocab = 0.0f,
+                sc_transl = 0.0f,
+                sc_board = 0.0f,
+                sc_shapes = 0.0f
+            )
+            registroViewModel.registrarUsuario(user,
                 onSuccess = {
                     runOnUiThread {
-                        // 4. Crea un Intent para iniciar la Activity correcta.
-                        //    La corrección clave está en usar '::class.java'.
-                        val intent = Intent(this, MenuPrincipalActivity::class.java)
-
-                        // 5. Inicia la nueva Activity.
-                        startActivity(intent)
+                        localLogin(user.user)
                     }
                 },
                 onConflict = {
                     runOnUiThread {
-                        AlertDialog.Builder(this)
-                            .setTitle("Fallo al iniciar sesión")
-                            .setMessage("Fallo al iniciar de forma local. Inténtelo de nuevo")
-                            .setPositiveButton("Aceptar") { dialog, _ ->
-                                dialog.dismiss()
-                            }
-                            .show()
+                        localLogin(user.user)
                     }
                 })
         }
@@ -76,6 +81,43 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, Registrarse::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun localLogin(user: String?) {
+        loginViewModel.loginUsuario("local", "local",
+            onSuccess = {
+                runOnUiThread {
+                    showSuccessDialog(user)
+                }
+            },
+            onConflict = {
+                runOnUiThread {
+                    showConflictDialog()
+                }
+            })
+    }
+
+    private fun showSuccessDialog(nombreUsuario: String?) {
+        AlertDialog.Builder(this)
+            .setTitle("Inicio de sesión exitoso")
+            .setMessage("Bienvenido $nombreUsuario")
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+                val intent = Intent(this, MenuPrincipalActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .show()
+    }
+
+    private fun showConflictDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Fallo al iniciar sesión")
+            .setMessage("Usuario/Correo y/o contraseña incorrectos o no encontrados")
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
 
