@@ -28,19 +28,9 @@ abstract class AppDatabase : RoomDatabase() {
                                 DATABASE_NAME
                             )
                     .fallbackToDestructiveMigration(false)
-                    .addCallback(DatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance
-            }
-        }
-    }
-
-    private class DatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            scope.launch(Dispatchers.IO) {
-                db.execSQL("INSERT INTO users (uid, user, email, password, sc_spell, sc_reading, sc_vocab, sc_transl, sc_board, sc_shapes) VALUES (1, 'local', 'l@l.com', 'local', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)")
             }
         }
     }
