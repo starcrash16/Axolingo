@@ -27,33 +27,34 @@ import kotlinx.coroutines.launch
 import java.io.InputStreamReader
 import kotlin.random.Random
 
+// Actividad para el juego de Spelling Bee
 class SpellingBeeActivity : BaseActivity() {
 
-    // sourceZone ahora es ViewGroup para aceptar FlexboxLayout
-    private lateinit var sourceZone: ViewGroup
-    private lateinit var answerZone: LinearLayout
-    private lateinit var wordToSpellText: TextView
-    private lateinit var btnValidate: Button
-    private lateinit var progressBar: ProgressBar
-    private lateinit var tvGameFinished: TextView
-    private lateinit var btnBackToMenu: Button
+    // Elementos de la interfaz de usuario
+    private lateinit var sourceZone: ViewGroup // Zona de letras disponibles
+    private lateinit var answerZone: LinearLayout // Zona de respuesta
+    private lateinit var wordToSpellText: TextView // Texto con la palabra a deletrear
+    private lateinit var btnValidate: Button // Botón para validar la respuesta
+    private lateinit var progressBar: ProgressBar // Barra de progreso del juego
+    private lateinit var tvGameFinished: TextView // Texto que indica el final del juego
+    private lateinit var btnBackToMenu: Button // Botón para volver al menú
 
-    // Game state variables
-    private var results: MutableList<Boolean> = mutableListOf()
-    private val gameWords = listOf("AXO", "CAT", "DOG", "SUN")
-    private var currentWordIndex: Int = 0
+    // Variables de estado del juego
+    private var results: MutableList<Boolean> = mutableListOf() // Resultados de las palabras
+    private val gameWords = listOf("AXO", "CAT", "DOG", "SUN") // Palabras del juego
+    private var currentWordIndex: Int = 0 // Índice de la palabra actual
     private val currentWord: String
         get() = if (gameWords.isNotEmpty() && currentWordIndex < gameWords.size) gameWords[currentWordIndex] else ""
 
-    // Constants for letter generation
-    private val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    private val NUM_DISTRACTORS = 10
+    // Constantes para la generación de letras
+    private val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" // Alfabeto
+    private val NUM_DISTRACTORS = 10 // Número de letras distractoras
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spelling_bee)
 
-        // Initialize UI components using IDs from XML
+        // Inicializar componentes de la interfaz de usuario
         sourceZone = findViewById(R.id.sourceZone)
         answerZone = findViewById(R.id.answerZone)
         wordToSpellText = findViewById(R.id.wordToSpellText)
@@ -62,11 +63,11 @@ class SpellingBeeActivity : BaseActivity() {
         tvGameFinished = findViewById(R.id.tvGameFinished)
         btnBackToMenu = findViewById(R.id.btnBackToMenu)
 
-        // Apply drag listeners
+        // Configurar listeners para las zonas de arrastre
         answerZone.setOnDragListener(dragListener)
         sourceZone.setOnDragListener(dragListener)
 
-        // Set up button listeners
+        // Configurar listeners para los botones
         btnValidate.setOnClickListener { onValidateClicked() }
         findViewById<Button>(R.id.btnRestart).setOnClickListener { resetCurrentWord() }
         btnBackToMenu.setOnClickListener {
@@ -75,75 +76,57 @@ class SpellingBeeActivity : BaseActivity() {
             finish()
         }
 
-        setupGame()
+        setupGame() // Configurar el juego
     }
 
-    /**
-     * Sets up the current level/word, generating the expanded letter bank.
-     */
+    // Configura el nivel/palabra actual y genera el banco de letras
     private fun setupGame() {
         if (currentWordIndex >= gameWords.size) {
-            showGameFinished()
+            showGameFinished() // Mostrar mensaje de finalización
             return
         }
 
-        // Update the progress counter
+        // Actualizar el contador de progreso
         progressBar.max = gameWords.size
         progressBar.progress = currentWordIndex
         wordToSpellText.text = "Deletrea: '${currentWord}'"
 
-        // Reset UI state
+        // Reiniciar el estado de la interfaz
         sourceZone.removeAllViews()
         answerZone.removeAllViews()
         answerZone.setBackgroundResource(R.drawable.answer_zone_bg)
         sourceZone.setBackgroundColor(Color.TRANSPARENT)
         btnValidate.isEnabled = true
 
-        // Display the current word hint
-        wordToSpellText.text = "Deletrea: '${currentWord}'"
-
-        // --- ENHANCEMENT: BROADENED LETTER BANK ---
+        // Generar letras objetivo y distractoras
         val targetLetters = currentWord.toList().map { it.toString() }.toMutableList()
-
-        // Add 10 random distractor letters
         val distractors = (1..NUM_DISTRACTORS).map {
             ALPHABET[Random.nextInt(ALPHABET.length)].toString()
         }
 
-        // Combine and shuffle all letters
+        // Combinar y mezclar todas las letras
         val allLetters = (targetLetters + distractors).shuffled()
 
-        // Create and add TextViews to the source zone
+        // Crear y agregar TextViews a la zona de letras disponibles
         for (letter in allLetters) {
             sourceZone.addView(createDraggableLetter(letter))
         }
     }
 
-    // SpellingBeeActivity.kt
-    private fun Int.dpToPx(): Int {
-        return (this * resources.displayMetrics.density).toInt()
-    }
-
-    /**
-     * Creates a TextView configured for dragging with fixed pixel margins.
-     * Note: Dimensions (120x120) and Margins (5px) are used directly as specified.
-     */
+    // Crea un TextView configurado para arrastrar
     private fun createDraggableLetter(letter: String): TextView {
         val marginInPixels = 5
-        val marginDp = 1
-        val marginPx = marginDp.dpToPx()
-
         val warmColors = listOf(
-            Color.parseColor("#FFB74D"), // Orange
-            Color.parseColor("#FFD54F"), // Yellow
-            Color.parseColor("#FF8A65"), // Light Red
-            Color.parseColor("#4FC3F7"), // Light Blue
-            Color.parseColor("#81C784"), // Light Green
-            Color.parseColor("#BA68C8"), // Purple
-            Color.parseColor("#F06292"), // Pink
-            Color.parseColor("#FFF176"), // Lemon
-            Color.parseColor("#A1887F"), // Brown
-            Color.parseColor("#E57373")  // Red
+            Color.parseColor("#FFB74D"), // Naranja
+            Color.parseColor("#FFD54F"), // Amarillo
+            Color.parseColor("#FF8A65"), // Rojo claro
+            Color.parseColor("#4FC3F7"), // Azul claro
+            Color.parseColor("#81C784"), // Verde claro
+            Color.parseColor("#BA68C8"), // Morado
+            Color.parseColor("#F06292"), // Rosa
+            Color.parseColor("#FFF176"), // Limón
+            Color.parseColor("#A1887F"), // Marrón
+            Color.parseColor("#E57373")  // Rojo
         )
         val randomColor = warmColors.random()
         val textView = TextView(this).apply {
@@ -157,7 +140,7 @@ class SpellingBeeActivity : BaseActivity() {
             }
         }
 
-        // Configure the listener to initiate the drag (Resto del código igual)
+        // Configurar el listener para iniciar el arrastre
         textView.setOnLongClickListener { view ->
             val clipData = ClipData.newPlainText("letter", letter)
             val shadowBuilder = View.DragShadowBuilder(view)
@@ -168,15 +151,9 @@ class SpellingBeeActivity : BaseActivity() {
         return textView
     }
 
-// Nota: La función dpToPx() y las llamadas a ella se han eliminado de esta versión
-// para adherirse a la solicitud de usar píxeles fijos.
-
-    /**
-     * Checks if the letters in the answerZone match the target word.
-     */
+    // Verifica si las letras en la zona de respuesta coinciden con la palabra objetivo
     private fun onValidateClicked() {
         val spelledWord = StringBuilder()
-        // Concatenate text from all children in the answerZone
         for (i in 0 until answerZone.childCount) {
             val child = answerZone.getChildAt(i)
             if (child is TextView) {
@@ -185,15 +162,13 @@ class SpellingBeeActivity : BaseActivity() {
         }
 
         val result = spelledWord.toString()
-
-        // Comparison against the current target word
-        results.add(result == currentWord)
+        results.add(result == currentWord) // Comparar con la palabra objetivo
         currentWordIndex++
-        setupGame()
+        setupGame() // Configurar el siguiente nivel
     }
 
+    // Reinicia la palabra actual devolviendo las letras a la zona de origen
     private fun resetCurrentWord() {
-        // Move all letters from answerZone back to sourceZone
         val lettersToReturn = mutableListOf<View>()
         for (i in 0 until answerZone.childCount) {
             lettersToReturn.add(answerZone.getChildAt(i))
@@ -206,8 +181,8 @@ class SpellingBeeActivity : BaseActivity() {
         sourceZone.setBackgroundColor(Color.TRANSPARENT)
     }
 
+    // Muestra el mensaje de finalización del juego
     private fun showGameFinished() {
-        // Hide all game views
         progressBar.visibility = View.GONE
         wordToSpellText.visibility = View.GONE
         answerZone.visibility = View.GONE
@@ -215,10 +190,10 @@ class SpellingBeeActivity : BaseActivity() {
         findViewById<Button>(R.id.btnValidate).visibility = View.GONE
         findViewById<Button>(R.id.btnRestart).visibility = View.GONE
         findViewById<View>(R.id.dottedLine).visibility = View.GONE
-        // Show final message and back button
+
         val score = results.count { it }
         val finalScore = score.toFloat() / 3.0f
-        
+
         val sessionManager = SessionManager(applicationContext)
         val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
 
@@ -233,16 +208,15 @@ class SpellingBeeActivity : BaseActivity() {
         btnBackToMenu.visibility = View.VISIBLE
     }
 
-    // Listener for drag events on both zones
+    // Listener para eventos de arrastre en ambas zonas
     private val dragListener = View.OnDragListener { view, event ->
-        if (view !is ViewGroup) { // Usamos ViewGroup para abarcar LinearLayout y Flexbox
+        if (view !is ViewGroup) {
             return@OnDragListener true
         }
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
                 event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
             }
-            // ... (ACTION_DRAG_ENTERED/EXITED/ENDED logic remains the same) ...
             DragEvent.ACTION_DROP -> {
                 val originalView = event.localState as View
                 val owner = originalView.parent as ViewGroup
@@ -250,11 +224,9 @@ class SpellingBeeActivity : BaseActivity() {
                 owner.removeView(originalView)
                 val destination = view
 
-                // Logic to insert the view at the approximate drop position (Improved UX)
                 var insertIndex = 0
                 for (i in 0 until destination.childCount) {
                     val child = destination.getChildAt(i)
-                    // This logic works well for LinearLayout. Flexbox may behave differently
                     if (event.x > child.left + child.width / 2) {
                         insertIndex = i + 1
                     }
@@ -270,7 +242,6 @@ class SpellingBeeActivity : BaseActivity() {
                 }
                 true
             }
-            // ... (Other drag events remain the same) ...
             else -> true
         }
     }

@@ -12,23 +12,31 @@ import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 import com.proyecto_final.axolingo.session.SessionManager
 import kotlinx.coroutines.launch
 
+// SplashActivity: pantalla de presentación que muestra una animación y decide
+// la siguiente pantalla según el estado de sesión del usuario.
+// - Si hay un usuario logueado, va a `MenuPrincipalActivity`.
+// - Si no hay usuario, va a `MainActivity`.
 class SplashActivity : AppCompatActivity() {
-    private lateinit var sessionManager: SessionManager     //instancia del gestor
+    // Gestor de sesión para decidir a qué actividad ir
+    private lateinit var sessionManager: SessionManager
+    // ImageView que muestra el logo animado
     private lateinit var myImageView: ImageView
-    private lateinit var loadingAnimator: AnimatorSet       //controlar la animacion
+    // AnimatorSet que controla la animación de la splash
+    private lateinit var loadingAnimator: AnimatorSet
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash)
         myImageView = findViewById(R.id.logo)
 
-        //cargando la animacion del xml
+        // Carga la animación definida en XML y la vincula al ImageView
         loadingAnimator = AnimatorInflater.loadAnimator(this, R.animator.scale_animation) as AnimatorSet
         loadingAnimator.setTarget(myImageView)
         loadingAnimator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                loadingAnimator.start()     //al terminar la animacion, vuelve a iniciar
+                // Reinicia la animación cuando termina para un efecto continuo
+                loadingAnimator.start()
             }
             override fun onAnimationCancel(animation: Animator) {}
             override fun onAnimationRepeat(animation: Animator) {}
@@ -36,6 +44,7 @@ class SplashActivity : AppCompatActivity() {
 
         loadingAnimator.start()
 
+        // Observa el flujo de sesión y redirige según si hay usuario autenticado
         sessionManager = SessionManager(applicationContext)
         lifecycleScope.launch {
             sessionManager.loginFlow.collect { username ->
@@ -44,6 +53,7 @@ class SplashActivity : AppCompatActivity() {
                 } else {
                     MainActivity::class.java
                 }
+                // Cancelar la animación antes de navegar
                 loadingAnimator.cancel()
                 val intent = Intent(this@SplashActivity, targetActivity)
                 startActivity(intent)
@@ -55,6 +65,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // Asegura que la animación esté cancelada para evitar fugas
         if (loadingAnimator.isRunning) {
             loadingAnimator.cancel()
         }

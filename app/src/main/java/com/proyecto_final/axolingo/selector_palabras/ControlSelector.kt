@@ -15,34 +15,39 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.proyecto_final.axolingo.R
 
+// Clase personalizada para seleccionar palabras y formar respuestas
 class ControlSelector : LinearLayout {
-    var txtInstrucciones: TextView? = null
-    var respuestaContainer: GridLayout? = null
-    var bancoContainer: GridLayout? = null
-    var btnRespuesta: Button? = null
-    var respuestaCorrecta: String? = null
+    // Elementos de la interfaz
+    var txtInstrucciones: TextView? = null // Texto para mostrar instrucciones
+    var respuestaContainer: GridLayout? = null // Contenedor para la respuesta del usuario
+    var bancoContainer: GridLayout? = null // Contenedor para las opciones disponibles
+    var btnRespuesta: Button? = null // Botón para comprobar la respuesta
+    var respuestaCorrecta: String? = null // Respuesta correcta esperada
 
+    // Propiedad para establecer instrucciones dinámicamente
     var instrucciones: String = ""
         set(value) {
             field = value
             txtInstrucciones?.text = value
         }
 
+    // Propiedad para establecer la respuesta correcta dinámicamente
     var respuesta: String = ""
         set(value) {
             field = value
             respuestaCorrecta = value
         }
 
+    // Listener para manejar eventos de arrastre y soltar
     private val dragListener = OnDragListener { view, event ->
         val draggedView = event.localState as TextView
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> { true }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                view.setBackgroundColor(Color.rgb(216, 216, 216))
+                view.setBackgroundColor(Color.rgb(216, 216, 216)) // Cambia el color al entrar
                 true
             }
-            DragEvent.ACTION_DRAG_EXITED -> {   //volver al valor original
+            DragEvent.ACTION_DRAG_EXITED -> {   // Vuelve al color original
                 view.setBackgroundResource(android.R.color.transparent)
                 true
             }
@@ -65,18 +70,22 @@ class ControlSelector : LinearLayout {
         }
     }
 
+    // Constructor principal
     constructor(context: Context?) : super(context){
         inicializar(null)
     }
 
+    // Constructor con atributos
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         inicializar(attrs)
     }
 
+    // Constructor con estilo
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         inicializar(attrs)
     }
 
+    // Inicializa los elementos de la vista
     private fun inicializar(attrs: AttributeSet?) {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.selector_palabras, this, true)
@@ -92,35 +101,37 @@ class ControlSelector : LinearLayout {
         attrs.recycle()
     }
 
+    // Carga las palabras en el banco de opciones
     fun cargarBancoDePalabras(palabras: List<String>) {
-        bancoContainer?.removeAllViews()       //limpia vistas creadas anteriormente
+        bancoContainer?.removeAllViews() // Limpia vistas anteriores
 
-        for (palabra in palabras.shuffled()) { //shuffle desordena las palabras
+        for (palabra in palabras.shuffled()) { // Desordena las palabras
             val wordView = createWordView(palabra)
             bancoContainer?.addView(wordView)
         }
     }
 
+    // Crea una vista para cada palabra
     fun createWordView(word: String): TextView {
         val wordView = LayoutInflater.from(context).inflate(
             R.layout.recuadro_palabra, bancoContainer, false) as TextView
         wordView.text = word
 
-        //listener de clic para mover la palabra
+        // Listener para mover la palabra entre contenedores
         wordView.setOnClickListener {
             val parent = it.parent as ViewGroup
             val clickedWord = it as TextView
 
-            if (parent.id == R.id.bancoContainer) {     //mueve la palabra del banco a la respuesta
+            if (parent.id == R.id.bancoContainer) { // Mueve del banco a la respuesta
                 bancoContainer?.removeView(clickedWord)
                 respuestaContainer?.addView(clickedWord)
-            } else if (parent.id == R.id.respuestaContainer) {     //regresa la palabra de la respuesta al banco
+            } else if (parent.id == R.id.respuestaContainer) { // Regresa del banco a la respuesta
                 respuestaContainer?.removeView(clickedWord)
                 bancoContainer?.addView(clickedWord)
             }
         }
 
-        //listener para arrastrar la palabra
+        // Listener para arrastrar la palabra
         wordView.setOnLongClickListener { view ->
             val textView = view as TextView
             val item = ClipData.Item(textView.text)
@@ -132,10 +143,12 @@ class ControlSelector : LinearLayout {
         return wordView
     }
 
+    // Configura el listener para comprobar la respuesta
     fun setComprobarListener(listener: OnClickListener) {
         btnRespuesta?.setOnClickListener(listener)
     }
 
+    // Comprueba si la respuesta del usuario es correcta
     fun comprobarRespuesta() : Boolean {
         val numChildren = respuestaContainer?.childCount ?: return false
         val respuestaFormada = mutableListOf<String>()

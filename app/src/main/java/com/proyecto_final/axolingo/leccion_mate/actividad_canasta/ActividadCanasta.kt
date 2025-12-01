@@ -22,47 +22,49 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+// Actividad para el juego de "Canasta Matemática"
 class ActividadCanasta : AppCompatActivity() {
     // Vistas del Juego
-    private lateinit var gameView: CanastaGameView
-    private lateinit var tvExpression: TextView
-    private lateinit var tvScore: TextView
-    private lateinit var heart1: ImageView
-    private lateinit var heart2: ImageView
-    private lateinit var heart3: ImageView
-    private lateinit var layoutGameContainer: ConstraintLayout
+    private lateinit var gameView: CanastaGameView // Vista personalizada del juego
+    private lateinit var tvExpression: TextView // Texto para mostrar la expresión matemática
+    private lateinit var tvScore: TextView // Texto para mostrar la puntuación
+    private lateinit var heart1: ImageView // Corazón 1 (vida)
+    private lateinit var heart2: ImageView // Corazón 2 (vida)
+    private lateinit var heart3: ImageView // Corazón 3 (vida)
+    private lateinit var layoutGameContainer: ConstraintLayout // Contenedor del juego
 
     // Capas (Overlays)
-    private lateinit var layoutStartOverlay: FrameLayout
-    private lateinit var layoutValidation: LinearLayout
-    private lateinit var layoutFinalResult: LinearLayout
+    private lateinit var layoutStartOverlay: FrameLayout // Capa de inicio
+    private lateinit var layoutValidation: LinearLayout // Capa de validación
+    private lateinit var layoutFinalResult: LinearLayout // Capa de resultado final
 
     // Componentes de UI lógica
-    private lateinit var btnStartGame: Button
-    private lateinit var btnValidateResult: Button
-    private lateinit var btnReturnMenu: Button
-    private lateinit var tvFinalExpression: TextView
-    private lateinit var etResultInput: EditText
-    private lateinit var tvCongratsTitle: TextView
-    private lateinit var tvFinalScore: TextView
-    private lateinit var imgResultIcon: ImageView
+    private lateinit var btnStartGame: Button // Botón para iniciar el juego
+    private lateinit var btnValidateResult: Button // Botón para validar el resultado
+    private lateinit var btnReturnMenu: Button // Botón para regresar al menú
+    private lateinit var tvFinalExpression: TextView // Texto con la expresión final
+    private lateinit var etResultInput: EditText // Campo de entrada para el resultado
+    private lateinit var tvCongratsTitle: TextView // Título de felicitaciones
+    private lateinit var tvFinalScore: TextView // Texto con la puntuación final
+    private lateinit var imgResultIcon: ImageView // Icono de resultado (éxito o error)
 
     // Estado del juego
-    private var lives = 3
-    private var score = 0
-    private val expression = mutableListOf<String>()
+    private var lives = 3 // Número de vidas
+    private var score = 0 // Puntuación actual
+    private val expression = mutableListOf<String>() // Expresión matemática en construcción
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.actividad_mate_canasta)
 
-        initializeViews()
-        setupListeners()
+        initializeViews() // Inicializar vistas
+        setupListeners() // Configurar listeners
 
-        // Estado inicial: Mostrar Popup de Inicio, Ocultar Juego
+        // Estado inicial: Mostrar pantalla de inicio y ocultar el juego
         showStartScreen()
     }
 
+    // Inicializa las vistas de la actividad
     private fun initializeViews() {
         // Juego
         gameView = findViewById(R.id.game_view)
@@ -89,33 +91,34 @@ class ActividadCanasta : AppCompatActivity() {
         imgResultIcon = findViewById(R.id.img_result_icon)
     }
 
+    // Configura los listeners para los botones y el juego
     private fun setupListeners() {
         // Listener del Juego (Canasta)
         gameView.setGameListener(object : CanastaGameView.GameListener {
             override fun onItemCaught(item: FallingItem) {
-                runOnUiThread { handleItemCaught(item) }
+                runOnUiThread { handleItemCaught(item) } // Manejar ítem atrapado
             }
 
             override fun onLifeLost() {
-                runOnUiThread { loseLife() }
+                runOnUiThread { loseLife() } // Manejar pérdida de vida
             }
 
             override fun onGameOver() {
-                runOnUiThread { showGameOverScreen() }
+                runOnUiThread { showGameOverScreen() } // Mostrar pantalla de fin del juego
             }
         })
 
-        // Botón Iniciar Juego (Popup inicial)
+        // Botón para iniciar el juego
         btnStartGame.setOnClickListener {
             startGame()
         }
 
-        // Botón Verificar Resultado (Pantalla de Ecuación)
+        // Botón para validar el resultado matemático
         btnValidateResult.setOnClickListener {
             validateUserMath()
         }
 
-        // Botón Regresar (Pantalla Final)
+        // Botón para regresar al menú principal
         btnReturnMenu.setOnClickListener {
             val intent = Intent(this, MenuLeccionMateActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -126,23 +129,26 @@ class ActividadCanasta : AppCompatActivity() {
 
     // --- GESTIÓN DE PANTALLAS ---
 
+    // Muestra la pantalla de inicio
     private fun showStartScreen() {
         layoutStartOverlay.visibility = View.VISIBLE
-        layoutGameContainer.visibility = View.VISIBLE // Se ve de fondo
+        layoutGameContainer.visibility = View.VISIBLE // Mostrar fondo del juego
         layoutValidation.visibility = View.GONE
         layoutFinalResult.visibility = View.GONE
 
-        // Asegurar que el juego no corra
+        // Asegurar que el juego no esté corriendo
         gameView.stopGame()
     }
 
+    // Inicia el juego
     private fun startGame() {
         layoutStartOverlay.visibility = View.GONE
         layoutGameContainer.visibility = View.VISIBLE
-        resetGameData()
-        gameView.resetGame() // Inicia el loop
+        resetGameData() // Reiniciar datos del juego
+        gameView.resetGame() // Iniciar el loop del juego
     }
 
+    // Muestra la pantalla de validación de la ecuación
     private fun showValidationScreen() {
         gameView.stopGame()
         layoutGameContainer.visibility = View.GONE
@@ -152,6 +158,7 @@ class ActividadCanasta : AppCompatActivity() {
         etResultInput.text.clear()
     }
 
+    // Muestra la pantalla de victoria
     private fun showVictoryScreen() {
         layoutValidation.visibility = View.GONE
         layoutFinalResult.visibility = View.VISIBLE
@@ -163,6 +170,7 @@ class ActividadCanasta : AppCompatActivity() {
         saveScore()
     }
 
+    // Muestra la pantalla de fin del juego
     private fun showGameOverScreen() {
         gameView.stopGame()
         layoutGameContainer.visibility = View.GONE
@@ -173,12 +181,13 @@ class ActividadCanasta : AppCompatActivity() {
         tvCongratsTitle.text = "¡INTÉNTALO DE NUEVO!"
         tvCongratsTitle.setTextColor(Color.RED)
         tvFinalScore.text = "Te quedaste sin vidas\nPuntuación: $score"
-        imgResultIcon.setImageResource(R.drawable.huevo) // Icono de error (huevo malo)
+        imgResultIcon.setImageResource(R.drawable.huevo) // Icono de error
         saveScore()
     }
 
+    // Guarda la puntuación final en la base de datos
     private fun saveScore() {
-        val finalScore = score.toFloat() 
+        val finalScore = score.toFloat()
         val sessionManager = SessionManager(applicationContext)
         val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
 
@@ -192,6 +201,7 @@ class ActividadCanasta : AppCompatActivity() {
 
     // --- LÓGICA DEL JUEGO ---
 
+    // Maneja los ítems atrapados en el juego
     private fun handleItemCaught(item: FallingItem) {
         when (item.type) {
             ItemType.HUEVO_BUENO -> {
@@ -221,14 +231,17 @@ class ActividadCanasta : AppCompatActivity() {
         updateUI()
     }
 
+    // Verifica si se puede agregar un número a la expresión
     private fun canAddNumber(): Boolean {
         return expression.isEmpty() || expression.last() in listOf("+", "-")
     }
 
+    // Verifica si se puede agregar un signo a la expresión
     private fun canAddSign(): Boolean {
         return expression.isNotEmpty() && expression.last() !in listOf("+", "-")
     }
 
+    // Verifica si la expresión matemática está completa
     private fun checkExpression() {
         val numbers = expression.filter { it !in listOf("+", "-") }.size
         val signs = expression.filter { it in listOf("+", "-") }.size
@@ -238,6 +251,7 @@ class ActividadCanasta : AppCompatActivity() {
         }
     }
 
+    // Valida el resultado ingresado por el usuario
     private fun validateUserMath() {
         val inputStr = etResultInput.text.toString()
         if (inputStr.isEmpty()) {
@@ -252,14 +266,12 @@ class ActividadCanasta : AppCompatActivity() {
             score += 20 // Bonus por acertar
             showVictoryScreen()
         } else {
-            // Opción: Mostrar Game Over o dejar reintentar. 
-            // Según tu prompt: "únicamente será valida si acierta". 
-            // Si falla, podemos mandarlo a Game Over o mostrar mensaje.
             Toast.makeText(this, "Incorrecto. La respuesta era $realResult", Toast.LENGTH_LONG).show()
             showGameOverScreen()
         }
     }
 
+    // Calcula el resultado de la expresión matemática
     private fun calculateResult(): Int {
         if (expression.isEmpty()) return 0
         try {
@@ -281,6 +293,7 @@ class ActividadCanasta : AppCompatActivity() {
         }
     }
 
+    // Maneja la pérdida de una vida
     private fun loseLife() {
         lives--
         if (lives <= 0) {
@@ -289,6 +302,7 @@ class ActividadCanasta : AppCompatActivity() {
         updateUI()
     }
 
+    // Reinicia los datos del juego
     private fun resetGameData() {
         lives = 3
         score = 0
@@ -296,6 +310,7 @@ class ActividadCanasta : AppCompatActivity() {
         updateUI()
     }
 
+    // Actualiza la interfaz de usuario
     private fun updateUI() {
         tvScore.text = "Puntuación: $score"
 

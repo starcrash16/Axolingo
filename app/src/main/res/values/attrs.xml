@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+        Archivo attrs.xml: define atributos personalizados que pueden usarse
+        en layouts para componentes reutilizables.
+        Comentarios debajo describen el propósito de cada grupo (declare-styleable).
+    -->
+
+    <!--
+        Atributos para controles que muestran preguntas/ejercicios.
+        - `instrucciones`: texto que aparece como la instrucción o enunciado.
+        - `respuesta`: valor esperado/respuesta que se puede comparar con la respuesta del usuario.
+    -->
     <declare-styleable name="Preguntas">
         <attr name="instrucciones" format="string" />
         <attr name="respuesta" format="string" />
     </declare-styleable>
 
+    <!--
+        Atributos para personalizar el aspecto de botones de lección.
+        - `mainButtonColor`: color principal del botón.
+        - `shadowButtonColor`: color de la sombra o parte inferior para efecto 3D.
+    -->
     <declare-styleable name="BotonLeccion">
         <attr name="mainButtonColor" format="color" />
         <attr name="shadowButtonColor" format="color" />
     </declare-styleable>
 
+    <!--
+        Atributos para una barra de progreso por etapas (StageProgressBar).
+        - `totalStages`: número total de etapas en la barra.
+        - `currentStage`: etapa activa actual (0-index o 1-index según implementación).
+    -->
     <declare-styleable name="StageProgressBar">
         <attr name="totalStages" format="integer" />
         <attr name="currentStage" format="integer" />

@@ -10,35 +10,35 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
-//import com.google.mlkit.vision.digitalink.Ink
 import kotlin.math.abs
 
+// Clase personalizada que representa un lienzo para dibujar
 class CLienzo : View {
+    // Canvas y Bitmap para el dibujo
     var extraCanvas: Canvas? = null
     var extraBitmap: Bitmap? = null
 
-    private val STROKE_WIDTH = 12f
-    private var backgroundColor: Int = 0
-    private var drawColor: Int = 0
+    private val STROKE_WIDTH = 12f // Ancho del trazo
+    private var backgroundColor: Int = 0 // Color de fondo
+    private var drawColor: Int = 0 // Color del dibujo
 
-    var path: Path = Path()
-    var paint: Paint = Paint()
-    var text: Paint = Paint()
-    //private var inkBuilder = Ink.builder()
-    //private var strokeBuilder = Ink.Stroke.builder()
+    // Herramientas de dibujo
+    var path: Path = Path() // Ruta del dibujo
+    var paint: Paint = Paint() // Configuración de pintura
+    var text: Paint = Paint() // Configuración de texto
 
     constructor(context: Context?) : super(context) {
-        inicializa()
+        inicializa() // Inicializa las configuraciones
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        inicializa()
+        inicializa() // Inicializa las configuraciones
     }
 
+    // Configura los colores y estilos de pintura
     private fun inicializa() {
-        //asingacion de colores
-        backgroundColor = Color.rgb(173, 173, 173)
-        drawColor = Color.BLACK
+        backgroundColor = Color.rgb(173, 173, 173) // Color de fondo gris
+        drawColor = Color.BLACK // Color de dibujo negro
 
         paint.color = drawColor
         paint.isAntiAlias = true
@@ -53,6 +53,7 @@ class CLienzo : View {
         text.textSize = 40f
     }
 
+    // Dibuja el contenido del lienzo
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (extraBitmap != null) {
@@ -60,6 +61,7 @@ class CLienzo : View {
         }
     }
 
+    // Reinicia el lienzo
     fun reset() {
         //se libera el bitmap de pintado
         if (extraBitmap != null) {
@@ -77,10 +79,12 @@ class CLienzo : View {
         return inkBuilder.build()
     }*/
 
+    // Devuelve el bitmap actual del lienzo
     fun getLienzoBitmap(): Bitmap? {
         return extraBitmap
     }
 
+    // Ajusta el tamaño del lienzo cuando cambia
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         reset()
@@ -110,6 +114,7 @@ class CLienzo : View {
     private var currentX = 0f;
     private var currentY = 0f;
 
+    // Inicia un nuevo trazo
     fun touchStart() {//(t: Long) {
         path.reset()
         path.moveTo(motionTouchEventX, motionTouchEventY)
@@ -122,6 +127,7 @@ class CLienzo : View {
 
     var touchTolerance: Int = ViewConfiguration.get(context).scaledTouchSlop
 
+    // Maneja el movimiento del trazo
     fun touchMove() {//(t: Long) {
         val dx = abs((motionTouchEventX - currentX).toDouble()).toFloat()
         val dy = abs((motionTouchEventY - currentY).toDouble()).toFloat()
@@ -141,6 +147,7 @@ class CLienzo : View {
         invalidate()
     }
 
+    // Finaliza el trazo
     fun touchUp() {//(t: Long) {
         path.reset()
         //termina el trazo y lo agrega al "Ink"

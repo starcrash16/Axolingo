@@ -2,8 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permisos requeridos por la aplicación -->
+    <!-- INTERNET: necesario para operaciones de red (descarga de datos, APIs, ML Kit remoto, etc.) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--
+        Application: define la configuración general de la aplicación y registra las Activities.
+        Atributos importantes:
+        - android:icon / android:roundIcon: iconos de la aplicación
+        - android:label: nombre de la aplicación
+        - android:theme: tema global
+    -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Axolingo">
 
-        <!-- Esta es tu actividad de inicio de sesión, la que se abre primero -->
+        <!-- SplashActivity: punto de entrada (LAUNCHER) -->
+        <!-- Presenta la pantalla de inicio y redirige según el estado de sesión -->
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -24,96 +34,49 @@
             </intent-filter>
         </activity>
 
+        <!-- MainActivity: pantalla de bienvenida / entry point alternativo -->
         <activity
             android:name=".MainActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
 
-        <activity
-            android:name=".userSignForms.SignInActivity"
-            android:exported="false">
-        </activity>
+        <!-- Actividades relacionadas con autenticación de usuarios -->
+        <activity android:name=".userSignForms.SignInActivity" android:exported="false" />
+        <activity android:name=".userSignForms.SignUpActivity" android:exported="false" />
 
-        <activity
-            android:name=".userSignForms.SignUpActivity"
-            android:exported="false" />
+        <!-- Menú principal y secciones de la app -->
+        <activity android:name=".menu_principal.MenuPrincipalActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.MenuLeccionInglesActivity" android:exported="false" />
+        <activity android:name=".leccion_mate.MenuLeccionMateActivity" android:exported="false" />
+
+        <!-- Actividades de lecciones y juegos -->
+        <activity android:name=".leccion_ingles.SpellingBeeActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.readingActivity.ReadingActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.readingActivity.QuestionActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.VocabularyActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.vocabActividad.VocabActivity" android:exported="false" />
+        <activity android:name=".leccion_ingles.vocabActividad.MenuVocabularyActivity" android:exported="false" />
+
+        <!-- Selector de palabras y pizarra interactiva -->
+        <activity android:name=".selector_palabras.InterfazSelector" android:exported="false" />
+        <activity android:name=".pizarra.InterfazPizarra" android:exported="false" />
+
+        <!-- Formularios y configuración -->
+        <activity android:name=".forms.Registrarse" android:exported="false" />
+        <activity android:name=".forms.IniciarSesion" android:exported="false" />
+        <activity android:name=".forms.CambiarContra" android:exported="false" />
+        <activity android:name=".configuraciones.ConfiguracionesUsuarioActivity" android:exported="false" />
+
+        <!-- Actividad de la lección de matemáticas (ej. Canasta) -->
+        <activity android:name=".leccion_mate.actividad_canasta.ActividadCanasta" android:exported="false" />
+
+        <!-- Actividad de información de la app -->
+        <activity android:name=".InfoAppActivity" android:exported="false" />
+
         <!--
-            LA CORRECCIÓN ESTÁ AQUÍ:
-            La declaración de MenuPrincipalActivity debe estar DENTRO de la etiqueta <application>
-            y con el nombre completo.
+            Meta-data para ML Kit: solicita dependencias de reconocimiento de dígitos.
+            Esto es usado por componentes que interpretan dígitos dibujados en la pizarra.
         -->
-        <activity
-            android:name=".menu_principal.MenuPrincipalActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".leccion_ingles.MenuLeccionInglesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".leccion_mate.MenuLeccionMateActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".leccion_ingles.SpellingBeeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".forms.Registrarse"
-            android:exported="false" />
-
-        <activity
-            android:name=".forms.IniciarSesion"
-            android:exported="false" />
-
-        <activity
-            android:name=".forms.CambiarContra"
-            android:exported="false" />
-
-        <activity
-            android:name=".selector_palabras.InterfazSelector"
-            android:exported="false" />
-
-        <activity
-            android:name=".pizarra.InterfazPizarra"
-            android:exported="false" />
-
-        <activity
-            android:name=".leccion_ingles.readingActivity.ReadingActivity"
-            android:exported="false" />
-      
-        <activity
-            android:name=".leccion_ingles.readingActivity.QuestionActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".leccion_ingles.VocabularyActivity"
-            android:exported="false"/>
-
-
-        <activity
-            android:name=".leccion_ingles.vocabActividad.VocabActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".leccion_ingles.vocabActividad.MenuVocabularyActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".configuraciones.ConfiguracionesUsuarioActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".leccion_mate.actividad_canasta.ActividadCanasta"
-            android:exported="false" />
-
-        <activity
-            android:name=".InfoAppActivity"
-            android:exported="false" />
-
-        <!-- solicitando el modelo para digitos -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="digit" />

@@ -12,14 +12,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+// Clase abstracta que representa la base de datos de la aplicación
 @Database(entities = [User::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
+    // Método abstracto para obtener el DAO de usuarios
     abstract fun userDao() : UserDao
-    companion object {
-        private const val DATABASE_NAME = "axolingo_db"
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
 
+    companion object {
+        private const val DATABASE_NAME = "axolingo_db" // Nombre de la base de datos
+        @Volatile
+        private var INSTANCE: AppDatabase? = null // Instancia única de la base de datos
+
+        // Método para obtener la instancia de la base de datos
         fun getDatabase(context: Context, scope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -27,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 AppDatabase::class.java,
                                 DATABASE_NAME
                             )
-                    .fallbackToDestructiveMigration(false)
+                    .fallbackToDestructiveMigration(false) // Manejo de migraciones
                     .build()
                 INSTANCE = instance
                 instance

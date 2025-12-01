@@ -18,22 +18,24 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+// Actividad que representa la interfaz de la pizarra mágica
 class InterfazPizarra : AppCompatActivity() {
-    private var indiceActual = 0
-    private lateinit var container: ViewGroup
-    var progressBar: ProgressBar? = null
-    val instruccion = "Completa la siguiente operacion\n"
-    var respCorrectas: Int = 0
+    private var indiceActual = 0 // Índice del ejercicio actual
+    private lateinit var container: ViewGroup // Contenedor de vistas dinámicas
+    var progressBar: ProgressBar? = null // Barra de progreso
+    val instruccion = "Completa la siguiente operacion\n" // Instrucción para el usuario
+    var respCorrectas: Int = 0 // Contador de respuestas correctas
 
+    // Lista de ejercicios generados aleatoriamente
     val ejercicios: List<List<Int>> = List(3) {
         val num1 = Random.nextInt(5, 11)
         val num2 = Random.nextInt(5)
         listOf(num1, num2)
     }
-    val operador: Array<String> = arrayOf("+", "-")
-    val numero_ejercicios = 3
+    val operador: Array<String> = arrayOf("+", "-") // Operadores matemáticos
+    val numero_ejercicios = 3 // Número total de ejercicios
 
-    // Lists to store the generated questions and answers for feedback
+    // Listas para almacenar preguntas y respuestas generadas
     private val generatedOperations = mutableListOf<String>()
     private val generatedResults = mutableListOf<String>()
 
@@ -43,22 +45,23 @@ class InterfazPizarra : AppCompatActivity() {
         container = findViewById(R.id.container)
         progressBar = findViewById(R.id.progressBar)
         progressBar?.max = 100
-        cargarSiguientePregunta()
+        cargarSiguientePregunta() // Cargar el primer ejercicio
     }
 
+    // Carga la siguiente pregunta o muestra la puntuación final
     private fun cargarSiguientePregunta() {
         if (indiceActual >= numero_ejercicios) {
             Toast.makeText(this, "¡Completaste todas las frases!", Toast.LENGTH_LONG).show()
             container.removeAllViews()
-            
-            val finalScore = respCorrectas.toFloat() / 3.0f
+
+            val finalScore = respCorrectas.toFloat() / 3.0f // Calcula la puntuación final
             val sessionManager = SessionManager(applicationContext)
             val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val username = sessionManager.loginFlow.first()
                 if (username != null) {
-                    userDao.updateSCBoard(username, finalScore)
+                    userDao.updateSCBoard(username, finalScore) // Guarda la puntuación en la base de datos
                 }
             }
 
@@ -70,7 +73,7 @@ class InterfazPizarra : AppCompatActivity() {
                 finish()
             }
             puntuacion.findViewById<Button>(R.id.btnFeedback).setOnClickListener {
-                showFeedbackDialog()
+                showFeedbackDialog() // Muestra un diálogo con las respuestas correctas
             }
             container.addView(puntuacion)
             return
@@ -81,10 +84,10 @@ class InterfazPizarra : AppCompatActivity() {
         val control = PizarraMagica(this)
         control.background = getDrawable(R.drawable.edittext_form)
         val num_op = Random.nextInt(2)
-        
+
         val operationString = "${ejercicios[indiceActual][0]} ${operador[num_op]} ${ejercicios[indiceActual][1]}"
         control.instrucciones = instruccion + operationString
-        
+
         var resultString = ""
         when (num_op) {
             0 -> resultString = (ejercicios[indiceActual][0] + ejercicios[indiceActual][1]).toString()
@@ -92,7 +95,7 @@ class InterfazPizarra : AppCompatActivity() {
         }
         control.respuesta = resultString
 
-        // Store for feedback
+        // Almacena las operaciones y resultados generados
         generatedOperations.add(operationString)
         generatedResults.add(resultString)
 
@@ -122,6 +125,7 @@ class InterfazPizarra : AppCompatActivity() {
         container.addView(control)
     }
 
+    // Muestra un diálogo con las respuestas correctas
     private fun showFeedbackDialog() {
         val builder = StringBuilder()
         for (i in generatedOperations.indices) {

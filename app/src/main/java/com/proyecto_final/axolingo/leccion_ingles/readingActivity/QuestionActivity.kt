@@ -20,32 +20,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+// Actividad para manejar las preguntas de una historia en la lección de inglés
 class QuestionActivity : BaseActivity() {
 
-    // UI elements
-    private lateinit var tvQuestion: TextView
-    private lateinit var radioGroupOptions: RadioGroup
-    private lateinit var btnOption1: RadioButton
-    private lateinit var btnOption2: RadioButton
-    private lateinit var btnOption3: RadioButton
-    private lateinit var btnOption4: RadioButton
+    // Elementos de la interfaz de usuario
+    private lateinit var tvQuestion: TextView // Texto de la pregunta
+    private var tvQuestionCounter: TextView? = null // Contador opcional "Pregunta X / Y"
+    private lateinit var radioGroupOptions: RadioGroup // Grupo de opciones
+    private lateinit var btnOption1: RadioButton // Opción 1
+    private lateinit var btnOption2: RadioButton // Opción 2
+    private lateinit var btnOption3: RadioButton // Opción 3
+    private lateinit var btnOption4: RadioButton // Opción 4
     private lateinit var btnSubmitAnswer: Button // Botón para enviar la respuesta
     private lateinit var btnFeedback: Button // Botón de retroalimentación
 
-    // Story data (will be passed from ReadingActivity)
-    private lateinit var currentStory: Story
-    private var currentQuestionIndex: Int = 0
-    private var score: Int = 0
+    // Datos de la historia (pasados desde ReadingActivity)
+    private lateinit var currentStory: Story // Historia actual
+    private var currentQuestionIndex: Int = 0 // Índice de la pregunta actual
+    private var score: Int = 0 // Puntuación del usuario
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.question_layout)
 
-        // Apply shaded background
+        // Aplicar fondo sombreado
         window.setBackgroundDrawableResource(R.drawable.axo_biblioteca_shaded)
 
-        // 1. Initialize UI components
+        // 1. Inicializar componentes de la interfaz de usuario
         tvQuestion = findViewById(R.id.tv_question)
+        // Intenta obtener un TextView opcional para mostrar el contador de preguntas
+        // El layout usa `tv_quiz_progress`, así que se busca ese id
+        tvQuestionCounter = findViewById(R.id.tv_quiz_progress)
         radioGroupOptions = findViewById(R.id.radio_group_options)
         btnOption1 = findViewById(R.id.rb_option1)
         btnOption2 = findViewById(R.id.rb_option2)
@@ -54,63 +59,82 @@ class QuestionActivity : BaseActivity() {
         btnSubmitAnswer = findViewById(R.id.btn_submit_answer)
         btnFeedback = findViewById(R.id.btn_feedback)
 
-        // 2. Get the story data passed from ReadingActivity
+        // 2. Obtener los datos de la historia pasados desde ReadingActivity
         val storyJson = intent.getStringExtra("story_data")
         if (storyJson != null) {
             currentStory = Gson().fromJson(storyJson, Story::class.java)
-            displayQuestion() // Start displaying questions
+            displayQuestion() // Comenzar a mostrar preguntas
         } else {
             Toast.makeText(this, "Error: No story data found!", Toast.LENGTH_LONG).show()
-            finish() // Close the activity if no data
+            finish() // Cerrar la actividad si no hay datos
         }
 
-        // 3. Set up submit button click listener
+        // 3. Configurar el botón para enviar respuestas
         btnSubmitAnswer.setOnClickListener {
             checkAnswer()
         }
 
+        // Configurar el botón de retroalimentación
         btnFeedback.setOnClickListener {
             showFeedbackDialog()
         }
     }
 
+    // Mostrar la pregunta actual en la interfaz
     private fun displayQuestion() {
+        // Actualiza contador (si existe)
+        updateQuestionCounter()
+
         if (currentQuestionIndex < currentStory.questions.size) {
             val question = currentStory.questions[currentQuestionIndex]
             tvQuestion.text = question.question
 
-            // Clear any previous selection
+            // Limpiar cualquier selección previa
             radioGroupOptions.clearCheck()
 
-            // Set options text
+            // Establecer el texto de las opciones
             btnOption1.text = question.options[0]
             btnOption2.text = question.options[1]
             btnOption3.text = question.options[2]
             btnOption4.text = question.options[3]
 
-            // Ensure radio buttons are enabled
+            // Asegurarse de que los botones estén habilitados
             btnOption1.isEnabled = true
             btnOption2.isEnabled = true
             btnOption3.isEnabled = true
             btnOption4.isEnabled = true
 
         } else {
-            // All questions answered
+            // Todas las preguntas respondidas
             showFinalScore()
         }
     }
 
+    // Actualiza un TextView opcional con el formato "Pregunta X / Y"
+    private fun updateQuestionCounter() {
+        val total = currentStory.questions.size
+        val indexToShow = (currentQuestionIndex + 1).coerceAtMost(total)
+        tvQuestionCounter?.text = "Pregunta $indexToShow / $total"
+    }
+
+    // Verificar la respuesta seleccionada por el usuario
     private fun checkAnswer() {
         val selectedOptionId = radioGroupOptions.checkedRadioButtonId
         if (selectedOptionId == -1) {
             Toast.makeText(this, "Please select an option!", Toast.LENGTH_SHORT).show()
-            return // Don't proceed if no option is selected
+            return // No continuar si no se seleccionó una opción
         }
 
         val selectedRadioButton: RadioButton = findViewById(selectedOptionId)
         val selectedAnswer = selectedRadioButton.text.toString()
 
-        val correctAnswer = currentStory.questions[currentQuestionIndex].answer_c
+        // Seguridad: obtener la respuesta correcta de forma segura
+        val correctAnswer = currentStory.questions.getOrNull(currentQuestionIndex)?.answer_c
+        if (correctAnswer == null) {
+            // Si por alguna razón no existe la pregunta actual, finalizamos
+            showFinalScore()
+            return
+        }
 
         if (selectedAnswer == correctAnswer) {
             score++
@@ -119,10 +143,12 @@ class QuestionActivity : BaseActivity() {
             Toast.makeText(this, "Incorrect. The answer was: $correctAnswer", Toast.LENGTH_LONG).show()
         }
 
-        currentQuestionIndex++
-        displayQuestion() // Move to the next question or finish
+        // Incrementa el índice de la pregunta y muestra la siguiente
+        currentQuestionIndex += 1
+        displayQuestion() // Pasar a la siguiente pregunta o finalizar
     }
 
+    // Mostrar la puntuación final del usuario
     private fun showFinalScore() {
         val finalScore = score.toFloat() / 3.0f
         val sessionManager = SessionManager(applicationContext)
@@ -135,17 +161,18 @@ class QuestionActivity : BaseActivity() {
             }
         }
         tvQuestion.text = "Quiz Finished! Your score is: $score / ${currentStory.questions.size}"
-        radioGroupOptions.visibility = RadioGroup.GONE // Hide options
+        radioGroupOptions.visibility = RadioGroup.GONE // Ocultar opciones
         btnSubmitAnswer.text = "Back to Menu"
-        btnFeedback.visibility = View.VISIBLE // Show feedback button
+        btnFeedback.visibility = View.VISIBLE // Mostrar botón de retroalimentación
         btnSubmitAnswer.setOnClickListener {
-            finish() // Or navigate to a results screen/main menu
+            finish() // O navegar a una pantalla de resultados/menú principal
         }
         Toast.makeText(this, "Quiz completed!", Toast.LENGTH_LONG).show()
 
         
     }
 
+    // Mostrar un diálogo con las respuestas correctas
     private fun showFeedbackDialog() {
         val builder = StringBuilder()
         for ((index, question) in currentStory.questions.withIndex()) {

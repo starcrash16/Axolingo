@@ -11,6 +11,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.TextViewCompat
 import com.proyecto_final.axolingo.R
 
+// Esta clase define un botón personalizado con estilos avanzados.
+// Permite configurar colores principales y de sombra desde XML.
 class BotonLeccion : AppCompatButton {
 
     constructor(context: Context) : super(context) {
@@ -24,13 +26,14 @@ class BotonLeccion : AppCompatButton {
     }
 
     private fun init(context: Context, attrs: AttributeSet?) {
-        // --- 1. Leer colores desde atributos XML ---
+        // Colores predeterminados para el botón
         val defaultMainColor = Color.parseColor("#ffde59")
         val defaultShadowColor = Color.parseColor("#fc5a41")
 
         var mainColor = defaultMainColor
         var shadowColor = defaultShadowColor
 
+        // Leer colores personalizados desde atributos XML
         if (attrs != null) {
             val typedArray = context.theme.obtainStyledAttributes(
                 attrs,
@@ -45,30 +48,28 @@ class BotonLeccion : AppCompatButton {
             }
         }
 
-        // --- 2. Crear los Drawables con los colores leídos ---
-
-        // Sombra (Color leído de XML)
+        // Crear los estilos del botón (sombra, borde, fondo principal)
         val shadowDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadius = 50f
-            setColor(shadowColor) // Usa el color del atributo
+            setColor(shadowColor)
         }
 
-        // Borde blanco (Fijo)
+        // Crear el borde blanco del botón
         val borderDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = 50f
-            setColor(Color.WHITE)
+            cornerRadius = 50f // Esquinas redondeadas con un radio de 50
+            setColor(Color.WHITE) // Color blanco para el borde
         }
 
-        // Botón principal (Color leído de XML)
+        // Crear el fondo principal del botón
         val mainButtonDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = 45f
-            setColor(mainColor) // Usa el color del atributo
+            cornerRadius = 45f // Esquinas redondeadas con un radio de 45
+            setColor(mainColor) // Color principal del botón
         }
 
-        // --- 3. Crear el LayerDrawable (misma lógica de antes) ---
+        // Combinar los estilos en un LayerDrawable
         val layerDrawable = LayerDrawable(arrayOf(shadowDrawable, borderDrawable, mainButtonDrawable)).apply {
             setLayerInset(0, 10, 15, 0, 0)      // Sombra
             setLayerInset(1, 5, 5, 5, 15)       // Borde
@@ -77,10 +78,7 @@ class BotonLeccion : AppCompatButton {
 
         background = layerDrawable
 
-        // --- 4. Configurar el texto (misma lógica de antes) ---
-
-
-        // Aplicar la fuente (puedes cambiar esto o quitarlo si no la tienes)
+        // Configurar la fuente del texto del botón
         try {
             val typeface = ResourcesCompat.getFont(context, R.font.moresugarthinnnn)
             this.typeface = typeface

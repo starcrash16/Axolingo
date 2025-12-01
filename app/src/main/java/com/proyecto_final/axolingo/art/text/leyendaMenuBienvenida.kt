@@ -9,48 +9,48 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.res.ResourcesCompat
 import com.proyecto_final.axolingo.R
 
+// Clase personalizada para un TextView con borde y fuente específica
 class leyendaMenuBienvenida @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : AppCompatTextView(context, attrs) {
 
-    private val strokeColor: Int
-    private val strokeWidthValue: Float
+    private val strokeColor: Int // Color del borde del texto
+    private val strokeWidthValue: Float // Grosor del borde
 
     init {
-        // Aquí definimos los valores para el borde.
-        // Para más flexibilidad en el futuro, estos podrían leerse
-        // desde atributos XML personalizados.
-        strokeColor = Color.parseColor("#3873b1")
-        strokeWidthValue = 8f // Puedes ajustar este valor para un borde más grueso o delgado
+        // Inicialización de los valores del borde
+        strokeColor = Color.parseColor("#3873b1") // Color azul para el borde
+        strokeWidthValue = 8f // Grosor del borde
         try {
-            // Reemplaza 'nombre_de_tu_fuente' con el nombre real de tu archivo en res/font.
+            // Configuración de la fuente personalizada
             val typeface = ResourcesCompat.getFont(context, R.font.moresugarthinnnn)
             this.typeface = typeface
         } catch (e: Exception) {
-            // Manejo de error por si la fuente no se encuentra.
+            // Manejo de errores si la fuente no se encuentra
             e.printStackTrace()
         }
     }
 
+    // Método para dibujar el texto con borde y relleno
     override fun onDraw(canvas: Canvas) {
-        val originalColor = currentTextColor
+        val originalColor = currentTextColor // Guardar el color original del texto
 
-        // Guardamos el estado actual de la "pintura" de texto
+        // Guardar el estado actual de la pintura del texto
         val paintStyle = paint.style
         val paintStrokeWidth = paint.strokeWidth
 
-        // 1. Dibujamos el borde (stroke)
+        // Dibujar el borde del texto
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = strokeWidthValue
         setTextColor(strokeColor)
-        super.onDraw(canvas) // Llama al onDraw original para que dibuje el texto con el borde
+        super.onDraw(canvas) // Dibujar el texto con el borde
 
-        // 2. Dibujamos el relleno (fill)
+        // Dibujar el relleno del texto
         paint.style = Paint.Style.FILL
         setTextColor(originalColor)
-        super.onDraw(canvas) // Llama al onDraw de nuevo para dibujar el texto relleno encima del borde
+        super.onDraw(canvas) // Dibujar el texto relleno encima del borde
 
-        // Restauramos la configuración original
+        // Restaurar la configuración original de la pintura
         paint.style = paintStyle
         paint.strokeWidth = paintStrokeWidth
     }

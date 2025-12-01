@@ -17,15 +17,17 @@ import com.proyecto_final.axolingo.session.SessionManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+// Actividad para gestionar las configuraciones del usuario
 class ConfiguracionesUsuarioActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuraciones)
 
+        // Referencias a las vistas
         val tvUsername = findViewById<TextView>(R.id.tvUsername)
         val btnChangePass = findViewById<Button>(R.id.btnChangePassword)
-        
-        // Score TextViews
+
+        // TextViews para mostrar las puntuaciones
         val tvScoreSpell = findViewById<TextView>(R.id.tvScoreSpell)
         val tvScoreReading = findViewById<TextView>(R.id.tvScoreReading)
         val tvScoreVocab = findViewById<TextView>(R.id.tvScoreVocab)
@@ -33,21 +35,25 @@ class ConfiguracionesUsuarioActivity : BaseActivity() {
         val tvScoreBoard = findViewById<TextView>(R.id.tvScoreBoard)
         val tvScoreShapes = findViewById<TextView>(R.id.tvScoreShapes)
 
+        // Inicialización de la sesión y base de datos
         val sessionManager = SessionManager(applicationContext)
         val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
 
+        // Cargar datos del usuario y actualizar la interfaz
         lifecycleScope.launch {
             val username = sessionManager.loginFlow.first()
             if (username != null) {
                 tvUsername.text = "Usuario: $username"
-                
+
+                // Ocultar el botón de cambiar contraseña si es un usuario local
                 if (username == "local") {
                     btnChangePass.visibility = View.GONE
                 } else {
                     btnChangePass.visibility = View.VISIBLE
                 }
 
-                val user = userDao.findUserToLogin(username) // Or findUserByName if strictly name
+                // Cargar puntuaciones del usuario desde la base de datos
+                val user = userDao.findUserToLogin(username)
                 if (user != null) {
                     tvScoreSpell.text = user.sc_spell.toString()
                     tvScoreReading.text = user.sc_reading.toString()
@@ -57,33 +63,28 @@ class ConfiguracionesUsuarioActivity : BaseActivity() {
                     tvScoreShapes.text = user.sc_shapes.toString()
                 }
             } else {
-                // Should not happen if we are in this activity, but handle gracefully
+                // Manejo de error si no se encuentra el usuario
                 tvUsername.text = "Usuario: Desconocido"
                 btnChangePass.visibility = View.GONE
             }
         }
 
-        // Configurar botón de cambiar contraseña
+        // Configurar botón para cambiar contraseña
         btnChangePass.setOnClickListener {
-            // Navigate to Change Password Activity if it exists, or show toast
-             val intent = Intent(this, com.proyecto_final.axolingo.forms.CambiarContra::class.java)
-             startActivity(intent)
+            val intent = Intent(this, com.proyecto_final.axolingo.forms.CambiarContra::class.java)
+            startActivity(intent)
         }
 
-        // Configurar navegación del Footer: Botón Home
+        // Configurar botón de navegación al menú principal
         val btnHome = findViewById<ImageButton>(R.id.btnHome)
         btnHome.setOnClickListener {
-            // Regresar al Menu Principal
             val intent = Intent(this, MenuPrincipalActivity::class.java)
-            // Flags para limpiar el stack si es necesario, o simplemente iniciar
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(intent)
-            finish() // Opcional: Cierra esta actividad para no acumular pantallas
+            finish() // Cierra esta actividad
         }
 
-        // El botón Settings no hace nada porque ya estamos en Settings
-
-        // Configurar botón FAB (Chistes)
+        // Configurar botón flotante para mostrar chistes
         val fabButton = findViewById<ImageButton>(R.id.btn_chiste)
         fabButton.setOnClickListener {
             JokeDialog(this).show()

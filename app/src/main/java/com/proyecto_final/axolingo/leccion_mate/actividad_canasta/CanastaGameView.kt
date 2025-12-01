@@ -2,8 +2,11 @@ package com.proyecto_final.axolingo.leccion_mate.actividad_canasta
 
 import android.content.Context
 import android.graphics.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import com.proyecto_final.axolingo.R
 import kotlin.random.Random
@@ -25,7 +28,7 @@ class CanastaGameView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr), SensorEventListener {
 
     interface GameListener {
         fun onItemCaught(item: FallingItem)
@@ -40,6 +43,11 @@ class CanastaGameView @JvmOverloads constructor(
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
     }
+
+    // Sensor de acelerómetro
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private val sensitivity = 15f // Sensibilidad del movimiento
 
     // Canasta
     private var canastaBitmap: Bitmap? = null
@@ -64,8 +72,14 @@ class CanastaGameView @JvmOverloads constructor(
 
     init {
         loadBitmaps()
+        initializeSensors()
         // No iniciamos el loop aquí automáticamente si vamos a usar un menú de inicio
         // startGameLoop()
+    }
+
+    private fun initializeSensors() {
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
 
     fun startGameLoop() {
@@ -121,14 +135,26 @@ class CanastaGameView @JvmOverloads constructor(
         canastaY = h - canastaHeight - 20f
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-                // Mover canasta horizontalmente centrándola en el dedo
-                canastaX = (event.x - canastaWidth / 2).coerceIn(0f, width - canastaWidth)
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            if (it.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                // El eje X del acelerómetro: inclinación lateral
+                // Valores positivos = inclinado a la derecha
+                // Valores negativos = inclinado a la izquierda
+                val tiltX = it.values[0]
+                
+                // Mover la canasta en dirección opuesta a la inclinación
+                // (si inclinas a la derecha, la canasta va a la izquierda)
+                canastaX -= tiltX * sensitivity
+                
+                // Mantener la canasta dentro de los límites
+                canastaX = canastaX.coerceIn(0f, width - canastaWidth)
             }
         }
-        return true
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // No necesitamos implementar esto
     }
 
     private fun updateGame() {
@@ -246,14 +272,17 @@ class CanastaGameView @JvmOverloads constructor(
 
     fun pauseGame() {
         isPaused = true
+        unregisterSensor()
     }
 
     fun resumeGame() {
         isPaused = false
+        registerSensor()
     }
 
     fun stopGame() {
         isRunning = false
+        unregisterSensor()
         try {
             gameThread?.join(100) // Esperar a que termine el hilo
         } catch (e: Exception) { e.printStackTrace() }
@@ -263,7 +292,27 @@ class CanastaGameView @JvmOverloads constructor(
         fallingItems.clear()
         lastSpawnTime = 0L
         isPaused = false
+        registerSensor()
         // Siempre intentamos iniciar el loop al resetear
         startGameLoop()
+    }
+
+    private fun registerSensor() {
+        accelerometer?.let {
+            sensorManager?.registerListener(
+                this,
+                it,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+        }
+    }
+
+    private fun unregisterSensor() {
+        sensorManager?.unregisterListener(this)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        unregisterSensor()
     }
 }

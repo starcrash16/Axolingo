@@ -21,29 +21,32 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.InputStream
 
+// Actividad que representa la interfaz para ejercicios de traducción
 class InterfazSelector : BaseActivity() {
 
-    private var indiceActual = 0
-    private lateinit var container: ViewGroup
-    var progressBar: ProgressBar? = null
-    val instruccion = "Traduce la siguiente frase\n"
-    var respCorrectas: Int = 0
+    private var indiceActual = 0 // Índice del ejercicio actual
+    private lateinit var container: ViewGroup // Contenedor de vistas dinámicas
+    var progressBar: ProgressBar? = null // Barra de progreso
+    val instruccion = "Traduce la siguiente frase\n" // Instrucción para el usuario
+    var respCorrectas: Int = 0 // Contador de respuestas correctas
 
-    lateinit var ejercicios: List<Ejercicio>
-    val numero_ejercicios = 5
+    lateinit var ejercicios: List<Ejercicio> // Lista de ejercicios cargados
+    val numero_ejercicios = 5 // Número total de ejercicios
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.menu_selector)
         container = findViewById(R.id.container)
 
+        // Carga los ejercicios desde un archivo JSON
         var listaEjercicios: List<Ejercicio> = cargarJSON(this)
         ejercicios = listaEjercicios.shuffled().take(numero_ejercicios)
         progressBar = findViewById(R.id.progressBar)
         progressBar?.max = 100
-        cargarSiguientePregunta()
+        cargarSiguientePregunta() // Cargar el primer ejercicio
     }
 
+    // Carga los ejercicios desde un archivo JSON
     private fun cargarJSON(context: Context): List<Ejercicio> {
         val inputStream: InputStream = context.resources.openRawResource(R.raw.palabras_traduccion)
         val jsonString = inputStream.bufferedReader().use { it.readText() }
@@ -52,19 +55,20 @@ class InterfazSelector : BaseActivity() {
         return gson.fromJson(jsonString, tipoLista)
     }
 
+    // Carga la siguiente pregunta o muestra la puntuación final
     private fun cargarSiguientePregunta() {
         if (indiceActual >= numero_ejercicios) {
             Toast.makeText(this, "¡Completaste todas las frases!", Toast.LENGTH_LONG).show()
             container.removeAllViews()
-            
-            val finalScore = respCorrectas.toFloat() / 3.0f
+
+            val finalScore = respCorrectas.toFloat() / 3.0f // Calcula la puntuación final
             val sessionManager = SessionManager(applicationContext)
             val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val username = sessionManager.loginFlow.first()
                 if (username != null) {
-                    userDao.updateSCTransl(username, finalScore)
+                    userDao.updateSCTransl(username, finalScore) // Guarda la puntuación en la base de datos
                 }
             }
 
@@ -76,7 +80,7 @@ class InterfazSelector : BaseActivity() {
                 finish()
             }
             puntuacion.findViewById<Button>(R.id.btnFeedback).setOnClickListener {
-                showFeedbackDialog()
+                showFeedbackDialog() // Muestra un diálogo con las respuestas correctas
             }
             container.addView(puntuacion)
             return
@@ -87,7 +91,7 @@ class InterfazSelector : BaseActivity() {
         val control = ControlSelector(this)
         control.background = getDrawable(R.drawable.edittext_form)
         control.instrucciones = instruccion + ejercicios[indiceActual].sentence
-        control.respuesta = ejercicios[indiceActual].answer//.joinToString(" ")
+        control.respuesta = ejercicios[indiceActual].answer
         control.cargarBancoDePalabras(ejercicios[indiceActual].words)
 
         control.setComprobarListener {
@@ -104,6 +108,7 @@ class InterfazSelector : BaseActivity() {
         container.addView(control)
     }
 
+    // Muestra un diálogo con las respuestas correctas
     private fun showFeedbackDialog() {
         val builder = StringBuilder()
         var index = 1

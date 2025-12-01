@@ -1,4 +1,4 @@
-// File: ReadingActivity.kt
+// Archivo: ReadingActivity.kt
 
 package com.proyecto_final.axolingo.leccion_ingles.readingActivity
 
@@ -15,34 +15,35 @@ import com.proyecto_final.axolingo.art.lectura_Art.StageProgressBar
 import java.util.Random
 import android.content.Intent
 
-// --- MAPPING CONSTANTS ---
-// We map the JSON field names to their index for sequential reading.
+// --- CONSTANTES DE MAPEADO ---
+// Mapeamos los nombres de los campos JSON a sus índices para la lectura secuencial.
 private const val STAGE_BEGINNING = 0
 private const val STAGE_DEV_1 = 1
 private const val STAGE_DEV_2 = 2
 private const val STAGE_END = 3
 private const val TOTAL_STAGES = 4
 
+// Actividad para manejar la lectura de historias en la lección de inglés
 class ReadingActivity : BaseActivity() {
 
-    // UI elements (lateinit for setup in onCreate)
-    private lateinit var tvTitle: TextView
-    private lateinit var ivStoryImage: ImageView
-    private lateinit var tvDescription: TextView
-    private lateinit var btnNext: Button
-    private lateinit var stageProgressBar: StageProgressBar
+    // Elementos de la interfaz de usuario (inicializados en onCreate)
+    private lateinit var tvTitle: TextView // Título de la historia
+    private lateinit var ivStoryImage: ImageView // Imagen asociada a la historia
+    private lateinit var tvDescription: TextView // Descripción de la etapa actual
+    private lateinit var btnNext: Button // Botón para avanzar a la siguiente etapa
+    private lateinit var stageProgressBar: StageProgressBar // Barra de progreso de la historia
 
-    // Story state variables
-    private lateinit var allStories: List<Story>
-    private lateinit var currentStory: Story
-    private var currentStage: Int = STAGE_BEGINNING
+    // Variables de estado de la historia
+    private lateinit var allStories: List<Story> // Lista de todas las historias disponibles
+    private lateinit var currentStory: Story // Historia seleccionada actualmente
+    private var currentStage: Int = STAGE_BEGINNING // Etapa actual de la historia
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Note: Assumes the layout file is named readinglayout.xml
+        // Nota: Se asume que el archivo de diseño se llama readinglayout.xml
         setContentView(R.layout.readinglayout)
 
-        // 1. Initialize UI components
+        // 1. Inicializar componentes de la interfaz de usuario
         tvTitle = findViewById(R.id.tv_story_title)
         ivStoryImage = findViewById(R.id.iv_story_image)
         tvDescription = findViewById(R.id.tv_story_description)
@@ -51,37 +52,37 @@ class ReadingActivity : BaseActivity() {
         stageProgressBar.setTotalStages(TOTAL_STAGES)
         stageProgressBar.setStage(currentStage)
 
-        // 2. Load and select story randomly
+        // 2. Cargar y seleccionar una historia aleatoriamente
         loadAndSelectRandomStory()
 
-        // 3. Set up the button click listener
+        // 3. Configurar el listener del botón para avanzar en la historia
         btnNext.setOnClickListener {
             advanceStory()
         }
     }
 
-    // Loads the JSON string, parses it, and selects one story randomly
+    // Carga la cadena JSON, la analiza y selecciona una historia aleatoriamente
     private fun loadAndSelectRandomStory() {
-        // In a real app, this JSON string would be loaded from a file or network.
+        // En una aplicación real, esta cadena JSON se cargaría desde un archivo o red.
         val jsonString = JSON_STORIES
 
-        // Use Gson to parse the array of Story objects
+        // Usar Gson para analizar el array de objetos Story
         val gson = Gson()
-        // Type token to help Gson parse a List<Story> correctly
+        // TypeToken para ayudar a Gson a analizar correctamente una List<Story>
         val type = TypeToken.getParameterized(List::class.java, Story::class.java).type
         allStories = gson.fromJson(jsonString, type)
 
-        // Select a random story
+        // Seleccionar una historia aleatoria
         val randomIndex = Random().nextInt(allStories.size)
         currentStory = allStories[randomIndex]
 
-        // Start the reading session
+        // Iniciar la sesión de lectura
         currentStage = STAGE_BEGINNING
         stageProgressBar.setStage(currentStage)
         updateUIForCurrentStage()
     }
 
-    // Advances the story stage or finishes the reading
+    // Avanza la etapa de la historia o finaliza la lectura
     private fun advanceStory() {
         currentStage++
 
@@ -91,7 +92,7 @@ class ReadingActivity : BaseActivity() {
         } else {
             // La historia ha terminado. Prepara la transición al cuestionario.
 
-          stageProgressBar.setStage(TOTAL_STAGES)
+            stageProgressBar.setStage(TOTAL_STAGES)
 
             btnNext.text = "Start Quiz" // Cambia el texto del botón
             tvDescription.text = "You finished the story! Tap the button to start the quiz."
@@ -113,47 +114,45 @@ class ReadingActivity : BaseActivity() {
         }
     }
 
-    // Updates the screen based on the current reading stage
+    // Actualiza la pantalla según la etapa de lectura actual
     private fun updateUIForCurrentStage() {
         tvTitle.text = currentStory.title
         btnNext.text = "Continue Reading"
-      stageProgressBar.setStage(currentStage)
+        stageProgressBar.setStage(currentStage)
 
-        // Get text and image key based on the current stage index
+        // Obtener texto e imagen según el índice de la etapa actual
         val (stageText, imageKey) = when (currentStage) {
             STAGE_BEGINNING -> Pair(currentStory.beginning, currentStory.image_keys[STAGE_BEGINNING])
             STAGE_DEV_1 -> Pair(currentStory.development_1, currentStory.image_keys[STAGE_DEV_1])
             STAGE_DEV_2 -> Pair(currentStory.development_2, currentStory.image_keys[STAGE_DEV_2])
             STAGE_END -> Pair(currentStory.end, currentStory.image_keys[STAGE_END])
-            else -> Pair("", "") // Should not happen
+            else -> Pair("", "") // No debería ocurrir
         }
 
-        // 1. Update text description
+        // 1. Actualizar la descripción del texto
         tvDescription.text = stageText
 
-        // 2. Update image based on the key
+        // 2. Actualizar la imagen según la clave
         val resourceId = getResourceId(imageKey)
         if (resourceId != 0) {
             ivStoryImage.setImageResource(resourceId)
         } else {
-            ivStoryImage.setImageResource(R.drawable.placeholder_default) // Fallback image
+            ivStoryImage.setImageResource(R.drawable.placeholder_default) // Imagen de respaldo
         }
     }
 
-    // Helper function to dynamically get the resource ID from the string name
+    // Función auxiliar para obtener dinámicamente el ID del recurso a partir del nombre de la cadena
     private fun getResourceId(resourceName: String): Int {
-        // Looks up the drawable ID using the string name (e.g., "axolotl_football_field_start")
+        // Busca el ID del drawable usando el nombre de la cadena (por ejemplo, "axolotl_football_field_start")
         return resources.getIdentifier(
-            resourceName.toLowerCase(), // Ensure resource names are lowercase in drawable folder
+            resourceName.toLowerCase(), // Asegúrate de que los nombres de los recursos estén en minúsculas en la carpeta drawable
             "drawable",
             packageName
         )
     }
-
 }
 
-
-// --- CONSTANT JSON STRING ---
+// --- CONSTANTE DE CADENA JSON ---
 private const val JSON_STORIES = """
 [
   {
