@@ -134,8 +134,7 @@ cd path\to\Axolingo
 **Contacto**
 
 - Repo: https://github.com/starcrash16/Axolingo
-- Para consultas o colaboración: abre un issue o PR en el repositorio.
 
 ---
 
-_Este README puede ajustarse a medida que el proyecto crece. ¿Quieres que genere una versión en inglés también?_ 
+
