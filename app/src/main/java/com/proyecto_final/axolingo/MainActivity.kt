@@ -3,7 +3,6 @@ package com.proyecto_final.axolingo
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipal
 import com.proyecto_final.axolingo.art.botons.BotonMenuPrincipalAzul
 import com.proyecto_final.axolingo.data.db.AppDatabase
@@ -14,7 +13,6 @@ import com.proyecto_final.axolingo.forms.Registrarse
 import com.proyecto_final.axolingo.forms.RegistroViewModel
 import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 import com.proyecto_final.axolingo.session.SessionManager
-import kotlinx.coroutines.launch
 
 // MainActivity: Pantalla de bienvenida / entry point de la app
 // - Permite crear un usuario local de prueba
@@ -37,7 +35,7 @@ class MainActivity : BaseActivity() {
         val signUpButton: BotonMenuPrincipal = findViewById(R.id.btnRegistro)
 
         // 3. Inicializa DAO y ViewModels necesarios para registro/login
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
         val sessionManager = SessionManager(applicationContext)
         registroViewModel = RegistroViewModel(userDao)
         loginViewModel = LoginViewModel(userDao, sessionManager)

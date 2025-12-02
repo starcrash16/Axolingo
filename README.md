@@ -88,6 +88,7 @@ Cada nivel puede contener varias lecciones y actividades; las puntuaciones permi
 **Creador(es) / Créditos**
 
 - Proyecto original y mantenimiento: `starcrash16` (GitHub)
+- Cocreador: `Harb3rt0` (GitHub)
 - Contribuidores: (añadir nombres de colaboradores aquí)
 
 Si quieres que aparezcan los nombres reales del equipo, reemplaza esta sección con la lista de autores y contactos.

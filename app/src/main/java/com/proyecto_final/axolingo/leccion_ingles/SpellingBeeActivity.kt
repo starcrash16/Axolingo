@@ -13,10 +13,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.data.db.AppDatabase
@@ -24,7 +21,6 @@ import com.proyecto_final.axolingo.session.SessionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.io.InputStreamReader
 import kotlin.random.Random
 
 // Actividad para el juego de Spelling Bee
@@ -195,7 +191,7 @@ class SpellingBeeActivity : BaseActivity() {
         val finalScore = score.toFloat() / 3.0f
 
         val sessionManager = SessionManager(applicationContext)
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 
         lifecycleScope.launch(Dispatchers.IO) {
             val username = sessionManager.loginFlow.first()

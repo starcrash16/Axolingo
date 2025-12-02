@@ -3,7 +3,6 @@ package com.proyecto_final.axolingo.leccion_ingles.readingActivity
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.RadioGroup
 import android.widget.RadioButton
@@ -152,7 +151,7 @@ class QuestionActivity : BaseActivity() {
     private fun showFinalScore() {
         val finalScore = score.toFloat() / 3.0f
         val sessionManager = SessionManager(applicationContext)
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 
         lifecycleScope.launch(Dispatchers.IO) {
             val username = sessionManager.loginFlow.first()

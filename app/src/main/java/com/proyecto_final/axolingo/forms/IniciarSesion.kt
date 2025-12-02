@@ -3,9 +3,6 @@ package com.proyecto_final.axolingo.forms
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.databinding.InicioSesionBinding
@@ -21,7 +18,7 @@ class IniciarSesion : BaseActivity(){
         super.onCreate(savedInstanceState)
 
         // Inicialización del DAO y ViewModel
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
         val sessionManager = SessionManager(applicationContext)
         loginViewModel = LoginViewModel(userDao, sessionManager)
         binding = InicioSesionBinding.inflate(layoutInflater)

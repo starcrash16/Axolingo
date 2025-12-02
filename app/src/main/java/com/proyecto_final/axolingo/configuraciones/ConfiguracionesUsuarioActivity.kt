@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.BaseActivity
 import com.proyecto_final.axolingo.R
@@ -37,7 +36,7 @@ class ConfiguracionesUsuarioActivity : BaseActivity() {
 
         // Inicialización de la sesión y base de datos
         val sessionManager = SessionManager(applicationContext)
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 
         // Cargar datos del usuario y actualizar la interfaz
         lifecycleScope.launch {

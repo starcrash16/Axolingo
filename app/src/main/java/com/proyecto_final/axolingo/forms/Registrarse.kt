@@ -3,8 +3,6 @@ package com.proyecto_final.axolingo.forms
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.data.entity.User
 import com.proyecto_final.axolingo.BaseActivity
@@ -19,7 +17,7 @@ class Registrarse : BaseActivity(){
         super.onCreate(savedInstanceState)
 
         // Inicialización del DAO y ViewModel
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
         registroViewModel = RegistroViewModel(userDao)
         binding = RegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)

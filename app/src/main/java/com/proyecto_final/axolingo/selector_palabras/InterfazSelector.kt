@@ -63,7 +63,7 @@ class InterfazSelector : BaseActivity() {
 
             val finalScore = respCorrectas.toFloat() / 3.0f // Calcula la puntuación final
             val sessionManager = SessionManager(applicationContext)
-            val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+            val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val username = sessionManager.loginFlow.first()

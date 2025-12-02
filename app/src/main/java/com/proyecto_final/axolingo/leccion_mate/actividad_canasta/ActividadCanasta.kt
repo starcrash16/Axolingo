@@ -189,7 +189,7 @@ class ActividadCanasta : AppCompatActivity() {
     private fun saveScore() {
         val finalScore = score.toFloat()
         val sessionManager = SessionManager(applicationContext)
-        val userDao = AppDatabase.getDatabase(applicationContext, lifecycleScope).userDao()
+        val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 
         lifecycleScope.launch(Dispatchers.IO) {
             val username = sessionManager.loginFlow.first()

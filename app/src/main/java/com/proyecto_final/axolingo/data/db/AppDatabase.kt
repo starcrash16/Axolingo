@@ -1,16 +1,11 @@
 package com.proyecto_final.axolingo.data.db
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.proyecto_final.axolingo.data.dao.UserDao
 import com.proyecto_final.axolingo.data.entity.User
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 // Clase abstracta que representa la base de datos de la aplicación
 @Database(entities = [User::class], version = 2)
@@ -24,7 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
         private var INSTANCE: AppDatabase? = null // Instancia única de la base de datos
 
         // Método para obtener la instancia de la base de datos
-        fun getDatabase(context: Context, scope: CoroutineScope): AppDatabase {
+        fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                                 context.applicationContext,

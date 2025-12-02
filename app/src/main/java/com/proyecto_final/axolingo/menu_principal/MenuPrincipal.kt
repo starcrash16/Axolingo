@@ -19,9 +19,6 @@ import com.proyecto_final.axolingo.R
 import com.proyecto_final.axolingo.art.caroussel.CarouselAdapter
 import com.proyecto_final.axolingo.art.caroussel.CarouselItem
 import com.proyecto_final.axolingo.configuraciones.ConfiguracionesUsuarioActivity
-import com.proyecto_final.axolingo.menu_vocabulario.MenuVocabularyActivity
-import com.proyecto_final.axolingo.pizarra.InterfazPizarra
-import com.proyecto_final.axolingo.selector_palabras.InterfazSelector
 
 // Importa las Activities a las que quieres navegar
 import com.proyecto_final.axolingo.leccion_ingles.MenuLeccionInglesActivity
@@ -29,14 +26,11 @@ import com.proyecto_final.axolingo.leccion_mate.MenuLeccionMateActivity
 import com.proyecto_final.axolingo.art.dialogs.JokeDialog
 import com.proyecto_final.axolingo.data.db.AppDatabase
 import com.proyecto_final.axolingo.forms.LoginViewModel
-import com.proyecto_final.axolingo.menu_principal.MenuPrincipalActivity
 import com.proyecto_final.axolingo.session.SessionManager
 import com.proyecto_final.axolingo.MusicManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 // import com.proyecto_final.axolingo.menu_chat.MenuChatActivity // <-- Descomenta cuando la tengas
 
@@ -113,7 +107,7 @@ class MenuPrincipal @JvmOverloads constructor(
         }
 
         scope?.launch(Dispatchers.IO) {
-            val userDao = AppDatabase.getDatabase(context, this).userDao()
+            val userDao = AppDatabase.getDatabase(context).userDao()
             val sessionManager = SessionManager(context)
             loginViewModel = LoginViewModel(userDao, sessionManager)
         }
